@@ -1,14 +1,32 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+    <header-nav-bar></header-nav-bar>
+    <router-view></router-view>
   </div>
 </template>
+<script>
+import HeaderNavBar from "@/components/TheHeaderNavBar";
+export default {
+  name: "App",
+  components: { HeaderNavBar },
+};
+</script>
 
 <style>
+.container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+.main {
+  min-width: 80%;
+  border: solid rgb(3, 13, 17);
+}
+.box {
+  padding: 5%;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -17,6 +35,14 @@
   color: #2c3e50;
 }
 
+.nav-list {
+  width: 50%;
+  justify-content: space-evenly;
+}
+nav .navbar-nav a.nav-link {
+  font-weight: bold;
+  color: #2c3e50 !important;
+}
 nav {
   padding: 30px;
 }
