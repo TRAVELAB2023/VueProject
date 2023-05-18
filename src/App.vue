@@ -21,10 +21,10 @@ export default {
 }
 .main {
   min-width: 80%;
-  border: solid rgb(3, 13, 17);
 }
 .box {
   padding: 5%;
+  border: solid rgb(3, 13, 17);
 }
 
 #app {
