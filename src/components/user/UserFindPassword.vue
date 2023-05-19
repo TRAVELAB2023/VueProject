@@ -2,7 +2,7 @@
   <div class="box">
     <h2>비밀번호 찾기</h2>
     <b-card>
-      <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+      <b-form @submit="onSubmit" v-if="show">
         <b-form-group id="email" label="이메일:" label-for="email">
           <b-form-input
             id="email"

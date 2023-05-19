@@ -3,9 +3,11 @@ import VueRouter from "vue-router";
 import UserLogin from "@/components/user/UserLogin";
 import UserJoin from "@/components/user/UserJoin";
 import UserFindPassword from "@/components/user/UserFindPassword";
+import AppBoard from "@/views/AppBoard.vue";
 Vue.use(VueRouter);
 
 const routes = [
+
   {
     path: "/",
     redirect: "/main",
@@ -17,13 +19,26 @@ const routes = [
   },
   {
     path: "/board",
+    redirect: "/board/list",
     name: "AppBoard",
-    component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard.vue"),
+    component: AppBoard,
+    children: [
+      {
+        path: "detail",
+        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/AppBoardDetail.vue"),
+      },
+      {
+        path: "list",
+        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/AppBoardList.vue"),
+      }
+    ]
   },
   {
     path: "/notice",
     name: "AppNotice",
     component: () => import(/* webpackChunkName: "board" */ "@/views/AppNotice.vue"),
+      children: [
+      ]
   },
   {
     path: "/plan",
