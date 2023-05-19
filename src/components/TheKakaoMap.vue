@@ -1,12 +1,23 @@
 <template>
   <div id="app">
     <div id="map"></div>
+    <div>{{ attractionList }}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: "KakaoMap",
+  props: {
+    attractions: Array,
+  },
+  data() {
+    return {
+      map: "",
+      clusterer: "",
+      attractionList: [],
+    };
+  },
   mounted() {
     if (window.kakao && window.kakao.maps) {
       this.initMap();
@@ -15,19 +26,77 @@ export default {
       /* global kakao */
       const key = process.env.VUE_APP_KAKAO_MAP_KEY;
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src = "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + key;
+      script.src =
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&libraries=services,clusterer,drawing&appkey=" +
+        key;
       document.head.appendChild(script);
     }
   },
   methods: {
     initMap() {
-      var container = document.getElementById("map");
-      var options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3,
+      let container = document.getElementById("map");
+      let options = {
+        //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(37.5599855058, 126.9752992762), //지도의 중심좌표.
+        level: 10, //지도의 레벨(확대, 축소 정도)
       };
 
-      new kakao.maps.Map(container, options);
+      this.map = new kakao.maps.Map(container, options);
+
+      this.clusterer = new kakao.maps.MarkerClusterer({
+        map: this.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+        minLevel: 7, // 클러스터 할 최소 지도 레벨
+      });
+    },
+    locateMap() {
+      console.log(this.attractionList);
+      if (this.attractionList.length == 0) {
+        alert("입력 결과가 없습니다.");
+        return;
+      }
+      this.initMap();
+      this.moveMap(this.attractionList[0]);
+      var markers = this.attractionList.forEach((data) => {
+        let marker = new kakao.maps.Marker({
+          position: new kakao.maps.LatLng(data.latitude, data.longitude),
+          clickable: true,
+        });
+        kakao.maps.event.addListener(marker, "click", function () {
+          // showModal(data);
+        });
+
+        return marker;
+      });
+
+      this.clusterer.addMarkers(markers);
+      kakao.maps.event.addListener(this.clusterer, "clusterclick", function (cluster) {
+        // 현재 지도 레벨에서 1레벨 확대한 레벨
+        let level = this.map.getLevel() - 1;
+
+        // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
+        this.map.setLevel(level, { anchor: cluster.getCenter() });
+      });
+    },
+    moveMap(data) {
+      let moveLatLon = new kakao.maps.LatLng(data.latitude, data.longitude);
+      let level = 10;
+      this.map.setCenter(moveLatLon);
+
+      // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
+      this.map.setLevel(level, { anchor: this.map.getCenter() });
+      // 지도 중심을 이동 시킵니다
+    },
+  },
+  watch: {
+    attractions(newList) {
+      this.attractionList = [];
+      newList.forEach((item) => {
+        this.attractionList.push(item);
+      });
+    },
+    attractionList() {
+      this.locateMap();
     },
   },
 };
