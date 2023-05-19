@@ -1,16 +1,13 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="main">
-        <router-view></router-view>
-      </div>
-    </div>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
+
 export default {
   name: "AppBoard",
+
+
 };
 </script>
 
