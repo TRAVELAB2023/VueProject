@@ -4,20 +4,31 @@
       <h2>공지사항</h2>
       <board-search-menu></board-search-menu>
       <BoardList v-bind:fields="fields" v-bind:board-list="BoardList"></BoardList>
+      <b-pagination-nav
+          align="center"
+          v-model="currentPage"
+          :number-of-pages="100"
+
+          base-url="#"
+          first-number
+          last-number
+          @input="pageMove"
+      ></b-pagination-nav>
     </div>
   </div>
 </template>
 
 <script>
-import BoardSearchMenu from "@/components/board/BoardSearchMenu";
+import BoardSearchMenu from "@/components/board/BoardSearchMenu.vue";
 import BoardList from "@/components/board/BoardList.vue";
 
 export default {
-  name: "AppNotice",
+  name: "AppNoticeList",
   components: {BoardSearchMenu, BoardList},
 
   data() {
     return {
+      currentPage: 1,
       fields:[
         {
           key: 'id',
@@ -31,7 +42,7 @@ export default {
           key: 'writer',
           label: '글쓴이',
         },{
-        key: 'registertime',
+          key: 'registertime',
           label: '작성시간'
         },
 
@@ -55,7 +66,12 @@ export default {
           writer: "글쓴이3",
           registertime: "2023-05-19"
         }
-      ]
+      ],
+      methods:{
+        pageMove(){
+          console.log(this.currentPage);
+        }
+      }
 
     }
   }

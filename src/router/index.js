@@ -3,7 +3,8 @@ import VueRouter from "vue-router";
 import UserLogin from "@/components/user/UserLogin";
 import UserJoin from "@/components/user/UserJoin";
 import UserFindPassword from "@/components/user/UserFindPassword";
-import AppBoard from "@/views/AppBoard.vue";
+import AppBoard from "@/views/board/AppBoard.vue";
+import AppBoardWrite from "@/views/board/AppBoardWrite.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -25,19 +26,36 @@ const routes = [
     children: [
       {
         path: "detail",
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/AppBoardDetail.vue"),
+        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardDetail.vue"),
       },
       {
         path: "list",
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/AppBoardList.vue"),
-      }
+        name: AppBoardWrite,
+        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardList.vue"),
+      },
+      {
+        path: "write",
+        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardWrite.vue"),
+      },
     ]
   },
   {
     path: "/notice",
     name: "AppNotice",
-    component: () => import(/* webpackChunkName: "board" */ "@/views/AppNotice.vue"),
+    redirect: "/notice/list",
+    component: () => import(/* webpackChunkName: "board" */ "@/views/notice/AppNotice.vue"),
       children: [
+        {
+          path: "list",
+          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeList.vue"),
+        },
+        {
+          path: "write",
+          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeWrite.vue"),
+        },{
+          path: "detail",
+          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeDetail.vue"),
+        },
       ]
   },
   {

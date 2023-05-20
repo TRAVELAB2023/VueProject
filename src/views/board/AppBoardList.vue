@@ -2,8 +2,14 @@
   <div class="container align-items-start">
     <div class="main">
       <h2>여행 후기</h2>
-      <board-search-menu></board-search-menu>
-      <BoardList v-bind:fields="fields" v-bind:board-list="BoardList"></BoardList>
+      <board-search-menu
+          v-bind:link="link"
+      ></board-search-menu>
+      <BoardList
+          v-bind:fields="fields" v-bind:board-list="BoardList"
+
+
+      ></BoardList>
       <b-pagination-nav
           align="center"
           v-model="currentPage"
@@ -21,14 +27,21 @@
 <script>
 import BoardSearchMenu from "@/components/board/BoardSearchMenu.vue";
 import BoardList from "@/components/board/BoardList.vue";
+import AppBoardWrite from "@/views/board/AppBoardWrite.vue";
 
 export default {
   name: "AppBoardList.vue",
+  computed: {
+    AppBoardWrite() {
+      return AppBoardWrite
+    }
+  },
   components: {BoardSearchMenu, BoardList},
 
   data() {
     return {
       currentPage: 1,
+      link:"/board/write",
       pages: [
         {
           link:"",

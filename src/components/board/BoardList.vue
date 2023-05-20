@@ -1,5 +1,5 @@
 <template>
-  <b-table striped hover :items="boardList" :fields="fields"></b-table>
+  <b-table selectable striped hover :items="boardList" :fields="fields"  @row-selected="onRowSelected"></b-table>
 </template>
 
 <script>
@@ -7,8 +7,15 @@ export default {
   name: "BoardList.vue",
   props: [
     "boardList",
-    "fields"
-  ]
+    "fields",
+
+  ],
+  methods:{
+    onRowSelected(item){
+      console.log(item);
+      // this.$router.push("")
+    }
+  }
 }
 </script>
 

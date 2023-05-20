@@ -11,14 +11,23 @@
 
       <input type="text" id="search-keyword" />
       <button id="searchBtn" class="btn-primary" style="width: 200px">검색</button>
-      <button id="createBtn" class="btn-dark" style="width: 200px">글쓰기</button>
+      <button @click="movePage" id="createBtn" class="btn-dark" style="width: 200px">글쓰기</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "BoardSearchMenu"
+  name: "BoardSearchMenu",
+  props:[
+      "link"
+  ],
+  methods:{
+    movePage(){
+      console.log(this.link);
+      this.$router.push(this.link);
+    }
+  }
 }
 </script>
 
