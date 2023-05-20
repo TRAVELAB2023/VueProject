@@ -13,6 +13,9 @@ export default {
 </script>
 
 <style>
+.b-sidebar {
+  min-width: 500px !important;
+}
 .container {
   display: flex;
   height: 100vh;
@@ -20,7 +23,7 @@ export default {
   align-items: center;
 }
 .main {
-  min-width: 80%;
+  min-width: 90%;
 }
 .box {
   padding: 5%;
