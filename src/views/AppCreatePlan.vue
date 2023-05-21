@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getSido, getGugun, getAttraction } from "@/api/attraction.js";
+import { getSido, getGugun, getAttractionList } from "@/api/attraction.js";
 import PlanListSideBar from "@/components/plan/PlanListSideBar";
 import KakaoMap from "@/components/TheKakaoMap";
 export default {
@@ -79,7 +79,7 @@ export default {
         contentTypeCode: this.selectedContentType,
         word: this.word,
       };
-      getAttraction(
+      getAttractionList(
         params,
         ({ data }) => {
           data.forEach((attraction) => {
