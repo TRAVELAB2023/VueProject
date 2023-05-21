@@ -4,7 +4,6 @@ import UserLogin from "@/components/user/UserLogin";
 import UserJoin from "@/components/user/UserJoin";
 import UserFindPassword from "@/components/user/UserFindPassword";
 import AppBoard from "@/views/board/AppBoard.vue";
-import AppBoardWrite from "@/views/board/AppBoardWrite.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -26,11 +25,12 @@ const routes = [
     children: [
       {
         path: "detail",
+        name: 'AppBoardDetail',
+        props:true,
         component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardDetail.vue"),
       },
       {
         path: "list",
-        name: AppBoardWrite,
         component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardList.vue"),
       },
       {

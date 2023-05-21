@@ -8,12 +8,10 @@ export default {
   props: [
     "boardList",
     "fields",
-
   ],
-  methods:{
-    onRowSelected(item){
-      console.log(item);
-      // this.$router.push("")
+  methods: {
+    onRowSelected(item) {
+      this.$router.push({name:'AppBoardDetail', params: {boardId: item[0].boardId}});
     }
   }
 }

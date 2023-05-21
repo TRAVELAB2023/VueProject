@@ -4,18 +4,18 @@
       <div>
 
         <div style="width: 800px;">
-          <h1>{{ title }}</h1>
+          <h1>{{ article.title }}</h1>
           <div class="border">
             <b-row>
-              <b-col>{{ writer }}</b-col>
-              <b-col>조회수: {{ hit }}</b-col>
-              <b-col>작성일시: {{ registerTime }}</b-col>
+              <b-col>{{ article.writerNickname }}</b-col>
+              <b-col>조회수: {{ article.hit }}</b-col>
+              <b-col>작성일시: {{ article.registerTime }}</b-col>
             </b-row>
           </div>
 
         </div>
 
-        <div style="width: 800px" class="border p-5" v-html="content"></div>
+        <div style="width: 800px" class="border p-5" v-html="article.content"></div>
         <div style="width: 800px" class="border p-4">
           <b-row>
             <b-col></b-col>
@@ -40,9 +40,9 @@
             <b-row class="align-items-center">
               <b-col></b-col>
               <b-col></b-col>
-              <b-col ><input style="width: 550px;" ></b-col>
-              <b-col >
-                <b-button style="width: 70px;">작성</b-button>
+              <b-col><input  style="width: 550px;" v-model="comment" ></b-col>
+              <b-col>
+                <b-button @click="commentSubmit" style="width: 70px;">작성</b-button>
               </b-col>
             </b-row>
           </div>
@@ -51,7 +51,7 @@
 
           <div></div>
 
-          <div v-for="reply in replies" :key="reply.commentId">
+          <div v-for="reply in article.commentBoardList" :key="reply.commentId">
             <div v-if="reply.replyDepth==false">
               <b-row class="border">
                 <b-col>{{ reply.memberNickname }}</b-col>
@@ -74,16 +74,7 @@
             </div>
 
           </div>
-          <b-pagination-nav
-              align="center"
-              v-model="currentPage"
-              :number-of-pages="100"
 
-              base-url="#"
-              first-number
-              last-number
-              @input="pageMove"
-          ></b-pagination-nav>
         </div>
       </div>
 
@@ -92,36 +83,55 @@
 </template>
 
 <script>
+import {getBoard, postComment} from "@/api/board";
+
+
 export default {
   name: "AppBoardDetail",
+
+  created() {
+
+    if(this.$route.params.boardId){
+      this.$store.commit('changeBoardId',this.$route.params.boardId)
+    }
+    this.boardId = this.$store.getters.getBoardId
+
+    getBoard(this.boardId, ({data}) => {
+          this.article = data;
+        },
+        (error) => {
+          console.log(error);
+        });
+  },
   data() {
     return {
-      currentPage: 1,
-      title: "글 제목입니다.  ",
-      content: "<div>글입니다</div>" +
-          "<img src='https://edu.ssafy.com/asset/images/logo.png'>",
-      writer: "김싸피",
-      hit: 1,
-      registerTime: "2023-05-19",
-
-      replies: [
-        {
-          commentId: 1,
-          memberNickname: "김싸피",
-          content: "노잼이에요",
-          replyDepth: false,
-          registerTime: "2023-05-19 02:41"
-        },
-        {
-          commentId: 2,
-          memberNickname: "박싸피",
-          content: "너도",
-          replyDepth: true,
-          registerTime: "2023-05-19 02:45"
-        },
-      ],
+      memberId: 12,
+      boardId: 0,
+      article: {},
+      comment: "",
     };
+  },
+  methods:{
+    commentSubmit(){
+      let param={
+        content: this.comment,
+        memberId: this.memberId,
+        boardId: this.boardId
+
+      }
+      postComment(param,({data})=>{
+        this.$router.go(0);
+        console.log(data)
+
+      },(error)=>{
+        console.log(error)
+
+      })
+    }
+
   }
+
+
 }
 </script>
 
