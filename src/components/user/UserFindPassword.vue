@@ -4,13 +4,7 @@
     <b-card>
       <b-form @submit="onSubmit" v-if="show">
         <b-form-group id="email" label="이메일:" label-for="email">
-          <b-form-input
-            id="email"
-            v-model="form.email"
-            type="email"
-            placeholder="이메일을 입력하세요"
-            required
-          ></b-form-input>
+          <b-form-input id="email" v-model="form.email" type="email" placeholder="이메일을 입력하세요" required></b-form-input>
         </b-form-group>
 
         <b-button type="submit" block variant="primary">이메일 변경 요청</b-button>
@@ -20,6 +14,7 @@
 </template>
 
 <script>
+import { sendEmail } from "@/api/email.js";
 export default {
   name: "UserFindPassword",
   data() {
@@ -33,6 +28,18 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
+      const param = {
+        email: this.form.email,
+      };
+      sendEmail(
+        param,
+        () => {
+          alert("성공적으로 전송되었습니다.");
+        },
+        () => {
+          alert("서버에 문제가 발생했습니다.");
+        }
+      );
       alert(JSON.stringify(this.form));
     },
   },
