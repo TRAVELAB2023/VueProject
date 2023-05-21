@@ -1,10 +1,7 @@
 <template>
   <div>
     <b-sidebar id="sidebar-right" title="여행 계획 등록" v-model="state" right shadow>
-      <div
-        class="m-2 border"
-        style="height: 90%; border: 1px solid lightgray; background-color: white"
-      >
+      <div class="m-2 border" style="height: 90%; border: 1px solid lightgray; background-color: white">
         <div class="d-flex align-content-center justify-content-center w-100 p-2 travel-list-whole">
           <div class="travel-list-header">여행지 선택 목록</div>
         </div>

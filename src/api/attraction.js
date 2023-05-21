@@ -8,7 +8,10 @@ function getSido(success, fail) {
 function getGugun(param, success, fail) {
   attraction.get(`/gugun/${param.sido}`).then(success).catch(fail);
 }
-function getAttraction(param, success, fail) {
+function getAttractionList(param, success, fail) {
   attraction.get(`/attraction`, { params: param }).then(success).catch(fail);
 }
-export { getSido, getGugun, getAttraction };
+function getAttraction(param, success, fail) {
+  attraction.get(`/attraction/${param.contentId}`).then(success).catch(fail);
+}
+export { getSido, getGugun, getAttraction, getAttractionList };
