@@ -24,7 +24,6 @@ export default {
   ],
   methods:{
     movePage(){
-      console.log(this.link);
       this.$router.push(this.link);
     }
   }
