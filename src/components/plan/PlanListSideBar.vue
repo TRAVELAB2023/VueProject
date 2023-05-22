@@ -9,12 +9,15 @@
           <div class="travel-list-header">여행지 선택 목록</div>
         </div>
         <div id="travel-list">
-          <plan-list-side-bar-item
-            v-for="(attraction, index) in myAttractionList"
-            :key="index"
-            @re-sort="resort"
-            :attraction="attraction"
-          ></plan-list-side-bar-item>
+          <draggable :list="myAttractionList">
+            <transition-group>
+              <plan-list-side-bar-item
+                v-for="(attraction, index) in myAttractionList"
+                :key="index"
+                :attraction="attraction"
+              ></plan-list-side-bar-item>
+            </transition-group>
+          </draggable>
         </div>
 
         <div class="p-2 d-flex justify-content-end" style="background-color: white; height: 10%">
@@ -27,6 +30,7 @@
 </template>
 
 <script>
+import draggable from "vuedraggable";
 import { mapState } from "vuex";
 import PlanListSideBarItem from "@/components/plan/item/PlanListSideBarItem";
 export default {
@@ -37,6 +41,7 @@ export default {
     };
   },
   components: {
+    draggable,
     PlanListSideBarItem,
   },
   computed: {

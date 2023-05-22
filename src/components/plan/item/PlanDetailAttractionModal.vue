@@ -8,7 +8,14 @@
   >
     <div class="modal-body">
       <div class="card mb-3">
-        <img id="travel-img" :src="attraction.firstImage" class="card-img-top" alt="..." />
+        <img
+          id="travel-img"
+          v-if="attraction.firstImage != ''"
+          :src="attraction.firstImage"
+          class="card-img-top"
+          alt="관광지 사진"
+        />
+        <img id="travel-img" v-else src="@/assets/noimg.png" class="card-img-top" alt="noImg" />
         <div class="card-body">
           <h5 id="travel-title" class="card-title">여행지 장소 : {{ attraction.title }}</h5>
           <small class="text-muted">주소 : {{ attraction.addr1 }}</small>
