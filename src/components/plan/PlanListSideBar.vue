@@ -46,10 +46,10 @@ export default {
     PlanListSideBarItem,
   },
   computed: {
-    ...mapMutations(["initAttractionList"]),
     ...mapState(["myAttractionList"]),
   },
   methods: {
+    ...mapMutations(["initAttractionList"]),
     change() {
       if (this.state) {
         this.$emit("shown");
@@ -61,8 +61,7 @@ export default {
       if (!confirm("초기화하시겠습니까?")) {
         return;
       }
-      this.$store.commit("initAttractionList", []);
-      // this.initAttractionList([]);
+      this.initAttractionList([]);
     },
     submitPlan() {
       if (!confirm("등록하시겠습니까? ")) {

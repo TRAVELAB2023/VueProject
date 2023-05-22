@@ -38,7 +38,7 @@ export default new Vuex.Store({
     },
     initAttractionList(state, attractionList) {
       console.log(attractionList);
-      state.myAttractionList = [];
+      state.myAttractionList = attractionList;
     },
     initMapAttractionList(state, attractionList) {
       state.mapAttractionsList = attractionList;

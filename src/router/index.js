@@ -3,13 +3,15 @@ import VueRouter from "vue-router";
 import UserLogin from "@/components/user/UserLogin";
 import UserJoin from "@/components/user/UserJoin";
 import UserFindPassword from "@/components/user/UserFindPassword";
-import AppBoard from "@/views/board/AppBoard.vue";
+
+import PlanList from "@/components/plan/PlanList";
+import PlanDetail from "@/components/plan/PlanDetail";
 Vue.use(VueRouter);
 
 const routes = [
-
   {
     path: "/",
+
     redirect: "/main",
   },
   {
@@ -19,49 +21,31 @@ const routes = [
   },
   {
     path: "/board",
-    redirect: "/board/list",
     name: "AppBoard",
-    component: AppBoard,
-    children: [
-      {
-        path: "detail",
-        name: 'AppBoardDetail',
-        props:true,
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardDetail.vue"),
-      },
-      {
-        path: "list",
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardList.vue"),
-      },
-      {
-        path: "write",
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardWrite.vue"),
-      },
-    ]
+    component: () => import(/* webpackChunkName: "board" */ "@/views/board/AppBoard.vue"),
   },
   {
     path: "/notice",
     name: "AppNotice",
-    redirect: "/notice/list",
     component: () => import(/* webpackChunkName: "board" */ "@/views/notice/AppNotice.vue"),
-      children: [
-        {
-          path: "list",
-          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeList.vue"),
-        },
-        {
-          path: "write",
-          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeWrite.vue"),
-        },{
-          path: "detail",
-          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeDetail.vue"),
-        },
-      ]
   },
   {
     path: "/plan",
     name: "AppPlan",
+    redirect: "/plan/list",
     component: () => import(/* webpackChunkName: "Plan" */ "@/views/AppPlan.vue"),
+    children: [
+      {
+        path: "list",
+        name: "PlanList",
+        component: PlanList,
+      },
+      {
+        path: "detail/:planid",
+        name: "PlanDetail",
+        component: PlanDetail,
+      },
+    ],
   },
   {
     path: "/createplan",
