@@ -27,7 +27,7 @@
           <b-button class="searchBtn" variant="success" @click="search">검색</b-button>
         </div>
 
-        <KakaoMap :attractions="attractionList"></KakaoMap>
+        <KakaoMap></KakaoMap>
       </div>
       <plan-list-side-bar @hidden="rollback" @shown="pushContent"></plan-list-side-bar>
     </div>
@@ -35,7 +35,8 @@
 </template>
 
 <script>
-import { getSido, getGugun, getAttractionList } from "@/api/attraction.js";
+import { mapActions } from "vuex";
+import { getSido, getGugun } from "@/api/attraction.js";
 import PlanListSideBar from "@/components/plan/PlanListSideBar";
 import KakaoMap from "@/components/TheKakaoMap";
 export default {
@@ -48,7 +49,6 @@ export default {
       selectedContentType: 0,
       gugunOptions: [],
       sidoOptions: [],
-      attractionList: [],
       contentTypeOptions: [
         { value: "0", text: "전체" },
         { value: "12", text: "관광지" },
@@ -65,6 +65,7 @@ export default {
   },
   components: { KakaoMap, PlanListSideBar },
   methods: {
+    ...mapActions(["getMapAttractionList"]),
     rollback() {
       this.isPush = false;
     },
@@ -72,24 +73,13 @@ export default {
       this.isPush = true;
     },
     search() {
-      this.attractionList = [];
       const params = {
         sidoCode: this.selectedSido,
         gugunCode: this.selectedGugun,
         contentTypeCode: this.selectedContentType,
         word: this.word,
       };
-      getAttractionList(
-        params,
-        ({ data }) => {
-          data.forEach((attraction) => {
-            this.attractionList.push(attraction);
-          });
-        },
-        (error) => {
-          alert(error.response.data);
-        }
-      );
+      this.getMapAttractionList(params);
     },
     initGugun() {
       this.gugunOptions = [];

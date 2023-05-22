@@ -1,18 +1,21 @@
 <template>
   <div id="app">
     <div id="map"></div>
-    <plan-detail-attraction-modal :type="`add`" :pre-attraction="attraction" @resetModal="resetModalShow" :pre-show="show"></plan-detail-attraction-modal>
+    <plan-detail-attraction-modal
+      :type="`add`"
+      :pre-attraction="attraction"
+      @resetModal="resetModalShow"
+      :pre-show="show"
+    ></plan-detail-attraction-modal>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { getAttraction } from "@/api/attraction";
 import PlanDetailAttractionModal from "./plan/item/PlanDetailAttractionModal";
 export default {
   name: "KakaoMap",
-  props: {
-    attractions: Array,
-  },
   components: { PlanDetailAttractionModal },
   data() {
     return {
@@ -20,8 +23,10 @@ export default {
       clusterer: "",
       show: false, // 모달 창 show 여부
       attraction: {},
-      attractionList: [],
     };
+  },
+  computed: {
+    ...mapState(["mapAttractionsList"]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -31,7 +36,9 @@ export default {
       /* global kakao */
       const key = process.env.VUE_APP_KAKAO_MAP_KEY;
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src = "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&libraries=services,clusterer,drawing&appkey=" + key;
+      script.src =
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&libraries=services,clusterer,drawing&appkey=" +
+        key;
       document.head.appendChild(script);
     }
   },
@@ -54,13 +61,13 @@ export default {
       });
     },
     locateMap() {
-      if (this.attractionList.length == 0) {
+      if (this.mapAttractionsList.length == 0) {
         alert("입력 결과가 없습니다.");
         return;
       }
       this.initMap();
-      this.moveMap(this.attractionList[0]);
-      var markers = this.attractionList.map((data) => {
+      this.moveMap(this.mapAttractionsList[0]);
+      var markers = this.mapAttractionsList.map((data) => {
         let marker = new kakao.maps.Marker({
           position: new kakao.maps.LatLng(data.latitude, data.longitude),
           clickable: true,
@@ -95,11 +102,10 @@ export default {
       getAttraction(
         param,
         ({ data }) => {
-          console.log(data);
           this.attraction = data;
         },
         (error) => {
-          alert(error);
+          alert(error.response.data);
         }
       );
       this.show = true;
@@ -109,15 +115,7 @@ export default {
     },
   },
   watch: {
-    attractions(newList) {
-      if (newList.length != 0) {
-        this.attractionList = [];
-        newList.forEach((item) => {
-          this.attractionList.push(item);
-        });
-      }
-    },
-    attractionList() {
+    mapAttractionsList() {
       this.locateMap();
     },
   },
