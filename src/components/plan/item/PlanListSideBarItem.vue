@@ -27,9 +27,9 @@ export default {
     attraction: Object,
   },
   methods: {
-    ...mapMutations(["deleteAttraction"]),
+    ...mapMutations(["deleteAttraction", "pushMapAttractionList"]),
     selectLocation() {
-      console.log("select");
+      this.pushMapAttractionList(this.attraction);
     },
     removeAttraction() {
       this.deleteAttraction(this.attraction);
