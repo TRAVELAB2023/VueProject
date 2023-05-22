@@ -5,19 +5,16 @@
 
       <div style="height: 20px"></div>
       <div  variant="outline-primary" style="height: 450px;">
-
-        <tiptap :event="postArticle" :list-link="linkList" />
+        <editor :id="boardId" :get="getBoard" :event="putArticle" :list-link="linkList" />
       </div>
-
-
     </div>
 
   </div>
 </template>
 
 <script>
-import Tiptap from '@/components/MyTiptab'
-import {postArticle} from "@/api/board";
+import Editor from '@/components/ModifyEditor.vue'
+import {getBoard, putArticle} from "@/api/board";
 import BoardList from "@/components/board/BoardList.vue";
 
 export default {
@@ -28,14 +25,19 @@ export default {
   },
   data() {
     return {
-
+      article:{},
+      boardId:'',
       linkList:"/board/list",
-      postArticle
+      putArticle,
+      getBoard
     };
   },
-  props:[postArticle],
+   created() {
+    this.boardId = this.$route.params.boardId;
+
+  },
   components:{
-    Tiptap
+    Editor
   },
 
   methods: {

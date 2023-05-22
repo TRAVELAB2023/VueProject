@@ -30,6 +30,12 @@ const routes = [
         component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardDetail.vue"),
       },
       {
+        path: "modify",
+        name: 'AppBoardModify',
+        props:true,
+        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardModify.vue"),
+      },
+      {
         path: "list",
         component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardList.vue"),
       },

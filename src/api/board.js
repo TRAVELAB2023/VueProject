@@ -11,17 +11,30 @@ function getBoard(boardId,success,fail) {
     api.get(`/board/${boardId}`
     ).then(success).catch(fail);
 }
-function postComment(param,success,fail){
+ function postComment(param,success,fail){
        api.post(`/board/comment`,JSON.stringify(param))
            .then(success).catch(fail)
 }
 function postImage(image,success,fail){
-    api.post('/image', {
-        image: image
+    api.post('/upload', {
+        file: image
+    },{
+        'headers': {
+            'Content-Type': "multipart/form-data"
+        }
     }).then(success).catch(fail);
 }
 function postArticle(param,success,fail){
     api.post(`/board`,JSON.stringify(param))
         .then(success).catch(fail)
 }
-export {getBoardList, getBoard, postComment, postImage, postArticle}
+
+function deleteArticle(boardId,success,fail) {
+    api.delete(`/board/${boardId}`
+    ).then(success).catch(fail);
+}
+function putArticle(param,success,fail){
+    api.put(`/board`,JSON.stringify(param))
+        .then(success).catch(fail)
+}
+export {getBoardList, getBoard, postComment, postImage, postArticle, deleteArticle,putArticle}
