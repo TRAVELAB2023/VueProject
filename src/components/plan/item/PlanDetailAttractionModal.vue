@@ -1,5 +1,11 @@
 <template>
-  <b-modal v-model="show" id="attraction-modal" @hidden="resetModal" centered title="관광지 세부 정보">
+  <b-modal
+    v-model="show"
+    id="attraction-modal"
+    @hidden="resetModal"
+    centered
+    title="관광지 세부 정보"
+  >
     <div class="modal-body">
       <div class="card mb-3">
         <img id="travel-img" :src="attraction.firstImage" class="card-img-top" alt="..." />
@@ -9,8 +15,8 @@
           <p id="travel-addr" class="card-text"></p>
           <small class="text-muted">설명 : {{ attraction.overview }}</small>
           <p id="travel-overview" class="card-text"></p>
-          <div class="text-end">
-            <button class="btn btn-success" id="addTravel">여행지 추가하기</button>
+          <div class="text-end" v-if="curType == 'add'">
+            <button class="btn btn-success" id="addTravel" @click="push">여행지 추가하기</button>
           </div>
         </div>
       </div>
@@ -23,6 +29,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "PlanDetailAttractionModal",
   props: {
@@ -32,6 +39,7 @@ export default {
   },
   data() {
     return {
+      curType: "",
       show: false,
       attraction: {
         addr1: "", // 주소
@@ -45,9 +53,18 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["pushAttraction"]),
     resetModal() {
       this.$emit("resetModal", false);
     },
+    push() {
+      this.pushAttraction(this.attraction);
+      this.show = false;
+      this.resetModal();
+    },
+  },
+  created() {
+    this.curType = this.type;
   },
   watch: {
     preShow(newVal) {

@@ -1,14 +1,20 @@
 <template>
   <div>
     <b-sidebar id="sidebar-right" title="여행 계획 등록" v-model="state" right shadow>
-      <div class="m-2 border" style="height: 90%; border: 1px solid lightgray; background-color: white">
+      <div
+        class="m-2 border"
+        style="height: 90%; border: 1px solid lightgray; background-color: white"
+      >
         <div class="d-flex align-content-center justify-content-center w-100 p-2 travel-list-whole">
           <div class="travel-list-header">여행지 선택 목록</div>
         </div>
         <div id="travel-list">
-          <plan-list-side-bar-item @re-sort="resort"></plan-list-side-bar-item>
-          <plan-list-side-bar-item @re-sort="resort"></plan-list-side-bar-item>
-          <plan-list-side-bar-item @re-sort="resort"></plan-list-side-bar-item>
+          <plan-list-side-bar-item
+            v-for="(attraction, index) in myAttractionList"
+            :key="index"
+            @re-sort="resort"
+            :attraction="attraction"
+          ></plan-list-side-bar-item>
         </div>
 
         <div class="p-2 d-flex justify-content-end" style="background-color: white; height: 10%">
@@ -21,6 +27,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import PlanListSideBarItem from "@/components/plan/item/PlanListSideBarItem";
 export default {
   name: "PlanListSideBar",
@@ -31,6 +38,9 @@ export default {
   },
   components: {
     PlanListSideBarItem,
+  },
+  computed: {
+    ...mapState(["myAttractionList"]),
   },
   methods: {
     resort(moveTarget, target) {

@@ -87,7 +87,7 @@ export default {
           });
         },
         (error) => {
-          alert(error);
+          alert(error.response.data);
         }
       );
     },
@@ -107,7 +107,7 @@ export default {
             });
           },
           (error) => {
-            alert(error);
+            alert(error.response.data);
           }
         );
       }
@@ -121,7 +121,7 @@ export default {
         });
       },
       (error) => {
-        alert(error);
+        alert(error.response.data);
       }
     );
     this.initGugun();

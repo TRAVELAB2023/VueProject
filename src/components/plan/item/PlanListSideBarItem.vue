@@ -7,27 +7,38 @@
     @dragend.prevent="endDragging"
   >
     <div class="w-25 d-flex justify-content-center align-content-center">
-      <img src="@/assets/logo.png" style="width: 100%; height: 100%" alt="..." />
+      <img :src="attraction.firstImage" style="width: 100%; height: 100%" alt="..." />
     </div>
     <div class="w-75">
-      <h5><small class="text-muted">장소 : </small>{{ Math.random() }}</h5>
+      <h5><small class="text-muted">장소 : </small>{{ attraction.title }}</h5>
       <div class="text-center">
-        <button class="btn btn-success">위치 조회</button>
-        <button class="btn btn-danger">삭제하기</button>
+        <button class="btn btn-success" @click="selectLocation">위치 조회</button>
+        <button class="btn btn-danger" @click="removeAttraction">삭제하기</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "PlanListSideBarItem",
+  props: {
+    attraction: Object,
+  },
   methods: {
+    ...mapMutations(["deleteAttraction"]),
+    selectLocation() {
+      console.log("select");
+    },
+    removeAttraction() {
+      this.deleteAttraction(this.attraction);
+    },
     addDragging(event) {
       event.target.classList.add("dragging");
     },
     endDragging(event) {
-      const prevDiv = this.getDragPrevElement(event.target.clientY);
+      const prevDiv = this.getDragPrevElement(event.clientY);
       event.target.classList.remove("dragging");
       this.$emit("re-sort", event.target, prevDiv);
     },
