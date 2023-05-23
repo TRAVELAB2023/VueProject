@@ -1,7 +1,7 @@
 import { apiInstance } from "./http.js";
 
 const attraction = apiInstance();
-
+attraction.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
 function getSido(success, fail) {
   attraction.get(`/sido`).then(success).catch(fail);
 }

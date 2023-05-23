@@ -2,6 +2,9 @@ import {apiInstance} from "@/api/http";
 
 const api = apiInstance();
 
+
+api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
+
 function getBoardList(param,success,fail) {
     api.get(`/board/list`, {params: param}
     ).then(success).catch(fail);

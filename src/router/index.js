@@ -4,17 +4,46 @@ import UserLogin from "@/components/user/UserLogin";
 import UserJoin from "@/components/user/UserJoin";
 import UserFindPassword from "@/components/user/UserFindPassword";
 import AppBoard from "@/views/board/AppBoard.vue";
+import store from "@/store";
 Vue.use(VueRouter);
+
+const onlyAuthUser = async (to, from, next) => {
+  const checkUserInfo = store.getters["memberStore/checkUserInfo"];
+  const checkToken = store.getters["memberStore/checkToken"];
+  let token = sessionStorage.getItem("auth-token");
+  console.log(store.getters);
+  console.log("로그인 처리 전", checkUserInfo, token);
+
+  if (checkUserInfo != null && token) {
+    console.log("토큰 유효성 체크하러 가자!!!!");
+    await store.dispatch("memberStore/getUserInfo", token);
+  }
+  if (!checkToken || checkUserInfo === null) {
+    alert("로그인이 필요한 페이지입니다..");
+    // next({ name: "login" });
+    console.log(from)
+    if(from.name!='UserLogin'){
+
+      router.push({ name: "UserLogin" });
+    }
+
+  } else {
+    console.log("로그인 했다!!!!!!!!!!!!!.");
+    next();
+  }
+};
 
 const routes = [
 
   {
     path: "/",
     redirect: "/main",
+    beforeEnter: onlyAuthUser,
   },
   {
     path: "/main",
     name: "AppMain",
+    beforeEnter: onlyAuthUser,
     component: () => import(/* webpackChunkName: "main" */ "@/views/AppMain.vue"),
   },
   {
@@ -22,6 +51,7 @@ const routes = [
     redirect: "/board/list",
     name: "AppBoard",
     component: AppBoard,
+    beforeEnter: onlyAuthUser,
     children: [
       {
         path: "detail",
@@ -49,6 +79,7 @@ const routes = [
     path: "/notice",
     name: "AppNotice",
     redirect: "/notice/list",
+    beforeEnter: onlyAuthUser,
     component: () => import(/* webpackChunkName: "board" */ "@/views/notice/AppNotice.vue"),
       children: [
         {
@@ -67,11 +98,13 @@ const routes = [
   {
     path: "/plan",
     name: "AppPlan",
+    beforeEnter: onlyAuthUser,
     component: () => import(/* webpackChunkName: "Plan" */ "@/views/AppPlan.vue"),
   },
   {
     path: "/createplan",
     name: "AppCreatePlan",
+    beforeEnter: onlyAuthUser,
     component: () => import(/* webpackChunkName: "createPlan" */ "@/views/AppCreatePlan.vue"),
   },
   {
