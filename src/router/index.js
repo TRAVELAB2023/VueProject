@@ -6,6 +6,8 @@ import UserFindPassword from "@/components/user/UserFindPassword";
 
 import PlanList from "@/components/plan/PlanList";
 import PlanDetail from "@/components/plan/PlanDetail";
+import PlanShareDetail from "@/components/plan/PlanShareDetail";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -44,6 +46,11 @@ const routes = [
         path: "detail/:planid",
         name: "PlanDetail",
         component: PlanDetail,
+      },
+      {
+        path: "share/:key",
+        name: "PlanShareDetail",
+        component: PlanShareDetail,
       },
     ],
   },

@@ -9,28 +9,11 @@
         @slideclick="handleSlideClick"
       >
         <img class="img" v-if="attraction.firstImage != ''" :src="attraction.firstImage" />
-        <img class="img" ref="" v-else src="@/assets/noimg.png" />
+        <img class="img" v-else src="@/assets/noimg.png" />
       </slide>
     </carousel>
     <div class="d-flex justify-content-end">
       <b-button @click="copyPlan">복제하기</b-button>
-      <b-button variant="danger" @click="removePlan">삭제하기</b-button>
-      <b-button variant="success" @click="showBottom = !showBottom">공유하기</b-button>
-      <b-alert
-        v-model="showBottom"
-        class="position-fixed fixed-bottom m-0 rounded-0"
-        style="z-index: 2000"
-        variant="warning"
-        dismissible
-      >
-        <div class="d-flex justify-content-center">
-          <b-form-input id="type-date" type="date" v-model="haltDate"></b-form-input>
-          <b-button class="shareBtn" variant="success" @click="createShareLink"
-            >공유링크 생성</b-button
-          >
-        </div>
-        <div class="d-flex"><span>공유 링크 : </span> <span v-text="shareLink"></span></div>
-      </b-alert>
     </div>
     <plan-detail-attraction-modal
       :type="`read`"
@@ -43,13 +26,12 @@
 
 <script>
 import { mapMutations } from "vuex";
-import { sharePlan } from "@/api/share-plan";
 import { getAttraction } from "@/api/attraction";
 import PlanDetailAttractionModal from "@/components/plan/item/PlanDetailAttractionModal";
-import { getPlan, deletePlan } from "@/api/plan";
+import { getSharePlan } from "@/api/share-plan";
 import { Carousel, Slide } from "vue-carousel";
 export default {
-  name: "PlanDetail",
+  name: "PlanShareDetail",
   components: {
     Carousel,
     Slide,
@@ -59,18 +41,14 @@ export default {
     return {
       attractionList: [],
       show: false, // 모달 창 show 여부
-      showBottom: false, // 공유하기 창 show 여부
-      haltDate: "", // 공유 종료 날짜
-      shareLink: "", // 공유 링크
       attraction: {},
-      baseLink: "http://localhost:8080/plan/share/",
     };
   },
   created() {
     const param = {
-      planid: this.$route.params.planid,
+      key: this.$route.params.key,
     };
-    getPlan(
+    getSharePlan(
       param,
       ({ data }) => {
         this.attractionList = data;
@@ -86,37 +64,7 @@ export default {
       this.initAttractionList(this.attractionList);
       this.$router.push({ name: "AppCreatePlan" });
     },
-    removePlan() {
-      const param = {
-        planid: this.$route.params.planid,
-      };
-      deletePlan(
-        param,
-        () => {
-          alert("성공적으로 삭제했습니다.");
-          this.$router.push({ name: "PlanList" });
-        },
-        (error) => {
-          alert(error.response.data);
-        }
-      );
-    },
-    createShareLink() {
-      const param = {
-        planId: this.$route.params.planid,
-        haltDate: this.haltDate,
-      };
-      sharePlan(
-        param,
-        ({ data }) => {
-          alert("링크가 생성되었습니다.");
-          this.shareLink = this.baseLink + data;
-        },
-        (error) => {
-          alert(error.response.data);
-        }
-      );
-    },
+
     handleSlideClick(dataset) {
       this.showModal(dataset.index);
     },
@@ -146,9 +94,5 @@ export default {
 .img {
   width: 50%;
   height: 100%;
-}
-.shareBtn {
-  width: 200px !important;
-  flex: none;
 }
 </style>

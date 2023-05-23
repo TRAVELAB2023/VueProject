@@ -62,7 +62,6 @@ export default {
     },
     locateMap() {
       if (this.mapAttractionsList.length == 0) {
-        alert("입력 결과가 없습니다.");
         return;
       }
       this.initMap();
@@ -103,12 +102,12 @@ export default {
         param,
         ({ data }) => {
           this.attraction = data;
+          this.show = true;
         },
         (error) => {
           alert(error.response.data);
         }
       );
-      this.show = true;
     },
     resetModalShow(state) {
       this.show = state;

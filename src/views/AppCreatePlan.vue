@@ -25,6 +25,15 @@
           </b-form-select>
           <b-form-input size="10" v-model="word" @keyup.enter="search"></b-form-input>
           <b-button class="searchBtn" variant="success" @click="search">검색</b-button>
+          <b-form-checkbox
+            id="checkbox-1"
+            v-model="memberLike"
+            value="true"
+            unchecked-value="false"
+            v-b-popover.hover.top="'누르시면 좋아요한 관광지만 표시됩니다.'"
+            title="좋아요한 관광지만 표시"
+          >
+          </b-form-checkbox>
         </div>
 
         <KakaoMap></KakaoMap>
@@ -47,6 +56,7 @@ export default {
       selectedGugun: 0,
       selectedSido: 0,
       selectedContentType: 0,
+      memberLike: false,
       gugunOptions: [],
       sidoOptions: [],
       contentTypeOptions: [
@@ -78,6 +88,7 @@ export default {
         gugunCode: this.selectedGugun,
         contentTypeCode: this.selectedContentType,
         word: this.word,
+        memberLike: this.memberLike,
       };
       this.getMapAttractionList(params);
     },
