@@ -84,12 +84,14 @@
 
 <script>
 import {deleteArticle, getBoard, postComment} from "@/api/board";
+import store from "@/store";
 
 
 export default {
   name: "AppBoardDetail",
 
   created() {
+    console.log(this.$store.getters["memberStore/checkUserInfo"]);
 
     if (this.$route.params.boardId) {
       this.$store.commit('changeBoardId', this.$route.params.boardId)
@@ -106,15 +108,15 @@ export default {
   data() {
     return {
       linkList: "/board/list",
-
-      memberId: 12,
+      memberId: this.$store.getters["memberStore/checkUserInfo"].memberId,
       boardId: 0,
       article: {},
       comment: "",
     };
   },
   methods: {
-    deleteArt(){
+   async deleteArt(){
+      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       deleteArticle(this.boardId,
           ()=>{
             this.$router.push(this.linkList)
@@ -134,7 +136,8 @@ export default {
     replyreply(item) {
       console.log(item)
     },
-    commentSubmit() {
+    async commentSubmit() {
+      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       let param = {
         content: this.comment,
         memberId: this.memberId,

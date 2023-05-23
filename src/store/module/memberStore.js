@@ -19,6 +19,7 @@ const memberStore = {
         },
     },
     mutations: {
+
         SET_IS_LOGIN: (state, isLogin) => {
             state.isLogin = isLogin;
         },
@@ -63,6 +64,7 @@ const memberStore = {
         async getUserInfo({ commit, dispatch }, token) {
             let decodeToken = jwtDecode(token);
             // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+
             await findById(
                 decodeToken.userid,
                 ({ data }) => {
@@ -84,9 +86,13 @@ const memberStore = {
         },
         async tokenRegeneration({ commit, state }) {
             console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("auth-token"));
+
+            console.log(state.userInfo)
             await tokenRegeneration(
                 JSON.stringify(state.userInfo),
                 ({ data }) => {
+                    console.log("data!!!!!")
+                    console.log(data)
                     if (data.message === "success") {
                         let accessToken = data["auth-token"];
                         console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
@@ -95,8 +101,10 @@ const memberStore = {
                     }
                 },
                 async (error) => {
+                    console.log("error!!!!!!!!!!")
+                    console.log(error)
                     // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-                    if (error.response.status === 401) {
+                    if (error.response.status == 401) {
                         console.log("갱신 실패");
                         // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
                         await logout(

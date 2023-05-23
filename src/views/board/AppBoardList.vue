@@ -30,34 +30,28 @@ import BoardSearchMenu from "@/components/board/BoardSearchMenu.vue";
 import BoardList from "@/components/board/BoardList.vue";
 import AppBoardWrite from "@/views/board/AppBoardWrite.vue";
 import {getBoardList} from "@/api/board";
+import store from "@/store";
 
 export default {
   name: "AppBoardList.vue",
   computed: {
     AppBoardWrite() {
       return AppBoardWrite
-    }
+    },
+
   },
   components: {BoardSearchMenu, BoardList},
-  created(){
+  created() {
 
-    let param= {
-          searchString:this.searchString,
-          searchType: this.searchType,
-          size: this.size,
-          start: this.start
+    let param = {
+      searchString: this.searchString,
+      searchType: this.searchType,
+      size: this.size,
+      start: this.start
     }
 
-    getBoardList(
-        param,
-        ({ data }) => {
-          this.BoardList = data.boardListDtoList;
-          this.pageSize=data.page;
-        },
-        (error) => {
-          console.log(error);
-        }
-    );
+    this.search(param);
+
   },
 
   data() {
@@ -67,8 +61,8 @@ export default {
       size: 10,
       start: 0,
       currentPage: 1,
-      pageSize:1,
-      linkWrite:"/board/write",
+      pageSize: 1,
+      linkWrite: "/board/write",
 
       fields: [
         {
@@ -82,7 +76,7 @@ export default {
         {
           key: 'writerNickname',
           label: '글쓴이',
-        },{
+        }, {
           key: 'hit',
           label: '조회수',
         },
@@ -95,37 +89,35 @@ export default {
       BoardList: []
 
 
-    }},
-  methods:{
-    search(param){
+    }
+  },
+
+  methods: {
+    async search(param) {
+      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       getBoardList(
           param,
-          ({ data }) => {
+          ({data}) => {
             this.BoardList = data.boardListDtoList;
-            this.pageSize=data.page;
+            this.pageSize = data.page;
           },
-          (error) => {
-            console.log(error);
+          async (error) => {
+            console.log(error.response.status)
+
+
+
+
           }
       );
     },
-    pageMove(){
-      let param= {
-        searchString:this.searchString,
+    pageMove() {
+      let param = {
+        searchString: this.searchString,
         searchType: this.searchType,
         size: this.size,
-        start: this.currentPage-1
+        start: this.currentPage - 1
       }
-      getBoardList(
-          param,
-          ({ data }) => {
-            this.BoardList = data.boardListDtoList;
-            this.pageSize=data.page;
-          },
-          (error) => {
-            console.log(error);
-          }
-      );
+      this.search(param);
     }
   }
 }
