@@ -23,8 +23,10 @@
           <small class="text-muted">설명 : {{ attraction.overview }}</small>
           <p id="travel-overview" class="card-text"></p>
           <div class="text-end" v-if="curType == 'add'">
-            <button class="btn btn-success" id="addTravel" @click="push">여행지 추가하기</button>
+            <b-button variant="primary" id="addTravel" @click="push">여행지 추가하기</b-button>
           </div>
+          <img class="lovers" v-if="isLover" @click="clickLover" src="@/assets/lovers-fill.png" />
+          <img class="lovers" v-else src="@/assets/lovers-empty.png" @click="clickLover" />
         </div>
       </div>
     </div>
@@ -36,6 +38,7 @@
 </template>
 
 <script>
+import { hasLover, clickLover } from "@/api/lovers";
 import { mapMutations } from "vuex";
 export default {
   name: "PlanDetailAttractionModal",
@@ -48,6 +51,7 @@ export default {
     return {
       curType: "",
       show: false,
+      isLover: false,
       attraction: {
         addr1: "", // 주소
         contentId: "", // ID
@@ -69,6 +73,42 @@ export default {
       this.show = false;
       this.resetModal();
     },
+    clickLover() {
+      const param = {
+        attractionId: this.attraction.contentId,
+      };
+      clickLover(
+        param,
+        ({ data }) => {
+          if (data == "1") {
+            this.isLover = true;
+          } else {
+            this.isLover = false;
+          }
+        },
+        () => {
+          alert("서버와 연결이 원활하지 않습니다.,");
+        }
+      );
+    },
+    checkLover() {
+      const param = {
+        attractionid: this.attraction.contentId,
+      };
+      hasLover(
+        param,
+        ({ data }) => {
+          if (data == true) {
+            this.isLover = true;
+          } else {
+            this.isLover = false;
+          }
+        },
+        () => {
+          alert("서버와 연결이 원활하지 않습니다.,");
+        }
+      );
+    },
   },
   created() {
     this.curType = this.type;
@@ -88,10 +128,16 @@ export default {
         this.attraction.longitude = newVal.longitude;
         this.attraction.overview = newVal.overview;
         this.attraction.title = newVal.title;
+        this.checkLover();
       }
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.lovers {
+  width: 20px;
+  height: 20px;
+}
+</style>
