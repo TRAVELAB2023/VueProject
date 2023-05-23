@@ -19,7 +19,7 @@
           </template>
           <b-dropdown-item :to="{ name: 'UserLogin' }">로그인</b-dropdown-item>
           <b-dropdown-item href="#">내 정보</b-dropdown-item>
-          <b-dropdown-item href="#">로그아웃</b-dropdown-item>
+          <b-dropdown-item @click="logout" href="#">로그아웃</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -27,8 +27,22 @@
 </template>
 
 <script>
+import store from "@/store";
 export default {
+  data(){
+    return{
+      email: this.$store.getters["memberStore/checkUserInfo"].email,
+    }
+  },
+
   name: "HeaderNavBar",
+  methods:{
+   async logout() {
+     console.log(this.email);
+     await store.dispatch("memberStore/userLogout",this.email);
+     this.$router.push("/user/login")
+    },
+  }
 };
 </script>
 

@@ -17,7 +17,17 @@ async function tokenRegeneration(user, success, fail) {
 }
 
 async function logout(email, success, fail) {
-  await api.get(`/member/logout/${email}`).then(success).catch(fail);
+  await api.post(`/member/logout/${email}`).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout };
+async function duplicateCheckEmail(email, success, fail) {
+  await api.get(`auth/check-duplicate-email/${email}`).then(success).catch(fail);
+}
+
+async function duplicateCheckNickname(nickname, success, fail) {
+  await api.get(`auth/check-duplicate-nickname/${nickname}`).then(success).catch(fail);
+}
+async function join(param, success, fail) {
+  await api.post(`auth/register/`,JSON.stringify(param)).then(success).catch(fail);
+}
+export { login, findById, tokenRegeneration, logout, duplicateCheckEmail, duplicateCheckNickname, join};

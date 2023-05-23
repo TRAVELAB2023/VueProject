@@ -36,8 +36,7 @@ const routes = [
 
   {
     path: "/",
-    redirect: "/main",
-    beforeEnter: onlyAuthUser,
+    redirect: "/user/login",
   },
   {
     path: "/main",

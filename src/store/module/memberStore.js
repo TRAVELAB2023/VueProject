@@ -132,8 +132,6 @@ const memberStore = {
             );
         },
         async userLogout({ commit }, email) {
-
-
             await logout(
                 email,
                 ({ data }) => {
