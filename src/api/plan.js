@@ -1,6 +1,6 @@
 import { apiInstance } from "./http.js";
 const plan = apiInstance();
-
+plan.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
 function postPlan(param, success, fail) {
   plan.post("/plan", JSON.stringify(param)).then(success).catch(fail);
 }

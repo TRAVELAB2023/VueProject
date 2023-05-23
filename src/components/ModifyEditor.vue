@@ -3,9 +3,9 @@
     <input type="file" @change="uploadFunction" id="file" hidden>
 
     <div className="example">
-      <div><input style="width: 100%;" placeholder="제목" v-model="title"></div>
+      <div><input style="width: 100%;" placeholder="제목" v-model="article.title"></div>
       <quill-editor
-          v-model="content"
+          v-model="article.content"
           ref="myTextEditor"
           :disabled="false"
           :options="editorOption"
@@ -18,7 +18,7 @@
           <b-button @click="moveList">목록</b-button>
         </b-col>
         <b-col>
-          <b-button @click="submitPost">작성</b-button>
+          <b-button @click="submitPost">수정</b-button>
         </b-col>
       </b-row>
     </div>
@@ -39,22 +39,25 @@ import {postImage} from "@/api/board";
 // import {postImage} from "@/api/board";
 
 export default {
-  name: "quill-example-snow",
-  title: "Theme: snow",
   components: {
     quillEditor,
   },
 
   props: [
     'event',
-      'listLink'
+    'listLink',
+      'id',
+      'get'
   ],
   created() {
-
+    this.get(this.id,({data})=>
+      this.article=data,(error)=>
+        console.log(error)
+    )
   },
   data() {
     return {
-      title: '',
+      article:{},
       editorOption: {
         placeholder: "place holder test",
         modules: {
@@ -88,44 +91,38 @@ export default {
           },
         },
       },
-      content: ''
     };
   },
   methods: {
-    moveList(){
+    moveList() {
       this.$router.push(this.listLink);
     },
 
     uploadFunction(e) {
       this.selectedFile = e.target.files[0];
-      console.log(this.selectedFile)
-      postImage(this.selectedFile,(r => {
-        console.log(r)
+      postImage(this.selectedFile, (r => {
 
         //this code to set your position cursor
         const range = this.$refs.myTextEditor.quill.getSelection()
 //this code to set image on your server to quill editor
-        this.$refs.myTextEditor.quill.insertEmbed(range.index , 'image', r.data)
-      }),(e) => {
+        this.$refs.myTextEditor.quill.insertEmbed(range.index, 'image', r.data)
+      }), (e) => {
         console.log(e)
       });
       // postImage(this.selectedFile,({}))
     },
-    updateUrl: function (image) {
-      console.log(image)
-      console.log('!!!!!!!');
-
-
-      //
-    },
     submitPost() {
       let param = {
-        title: this.title,
-        content: this.content,
-        memberId: 12
+        id: this.id,
+        title: this.article.title,
+        content: this.article.content,
       }
 
-      this.event(param, () => this.$router.push('/board/list'), () => this.$router.push('/board/list'));
+
+      this.event(param, ({data}) =>{
+        console.log(data)
+        this.$router.push('/board/list')
+      } , (e) => console.log(e));
 
 
     },

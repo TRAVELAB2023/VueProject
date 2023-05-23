@@ -3,7 +3,8 @@
     <div class="main">
       <h2>여행 후기</h2>
       <board-search-menu
-          v-bind:link="link"
+          v-bind:link="linkWrite"
+          @search="search"
       ></board-search-menu>
       <BoardList
           v-bind:fields="fields" v-bind:board-list="BoardList"
@@ -67,7 +68,7 @@ export default {
       start: 0,
       currentPage: 1,
       pageSize:1,
-      link:"/board/write",
+      linkWrite:"/board/write",
 
       fields: [
         {
@@ -96,6 +97,18 @@ export default {
 
     }},
   methods:{
+    search(param){
+      getBoardList(
+          param,
+          ({ data }) => {
+            this.BoardList = data.boardListDtoList;
+            this.pageSize=data.page;
+          },
+          (error) => {
+            console.log(error);
+          }
+      );
+    },
     pageMove(){
       let param= {
         searchString:this.searchString,

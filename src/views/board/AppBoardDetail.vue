@@ -22,13 +22,13 @@
             <b-col></b-col>
             <b-row>
               <b-col>
-                <b-button>목록</b-button>
+                <b-button @click="moveList">목록</b-button>
               </b-col>
               <b-col>
-                <b-button>수정</b-button>
+                <b-button @click="modify">수정</b-button>
               </b-col>
               <b-col>
-                <b-button>삭제</b-button>
+                <b-button @click="deleteArt">삭제</b-button>
               </b-col>
             </b-row>
           </b-row>
@@ -40,7 +40,7 @@
             <b-row class="align-items-center">
               <b-col></b-col>
               <b-col></b-col>
-              <b-col><input  style="width: 550px;" v-model="comment" ></b-col>
+              <b-col><input style="width: 550px;" v-model="comment"></b-col>
               <b-col>
                 <b-button @click="commentSubmit" style="width: 70px;">작성</b-button>
               </b-col>
@@ -51,7 +51,7 @@
 
           <div></div>
 
-          <div v-for="reply in article.commentBoardList" :key="reply.commentId">
+          <div v-for="reply in article.commentBoardList" :key="reply.commentId" @click="replyreply(reply)">
             <div v-if="reply.replyDepth==false">
               <b-row class="border">
                 <b-col>{{ reply.memberNickname }}</b-col>
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import {getBoard, postComment} from "@/api/board";
+import {deleteArticle, getBoard, postComment} from "@/api/board";
 
 
 export default {
@@ -91,8 +91,8 @@ export default {
 
   created() {
 
-    if(this.$route.params.boardId){
-      this.$store.commit('changeBoardId',this.$route.params.boardId)
+    if (this.$route.params.boardId) {
+      this.$store.commit('changeBoardId', this.$route.params.boardId)
     }
     this.boardId = this.$store.getters.getBoardId
 
@@ -105,25 +105,47 @@ export default {
   },
   data() {
     return {
+      linkList: "/board/list",
+
       memberId: 12,
       boardId: 0,
       article: {},
       comment: "",
     };
   },
-  methods:{
-    commentSubmit(){
-      let param={
+  methods: {
+    deleteArt(){
+      deleteArticle(this.boardId,
+          ()=>{
+            this.$router.push(this.linkList)
+          }
+
+          ,()=>{
+        alert('글 작성 실패')
+          }
+      )
+    },
+    modify() {
+      this.$router.push({name: "AppBoardModify", params: {boardId: this.boardId}})
+    },
+    moveList() {
+      this.$router.push(this.linkList);
+    },
+    replyreply(item) {
+      console.log(item)
+    },
+    commentSubmit() {
+      let param = {
         content: this.comment,
         memberId: this.memberId,
         boardId: this.boardId
 
       }
-      postComment(param,({data})=>{
+      postComment(param, ({data}) => {
         this.$router.go(0);
         console.log(data)
 
-      },(error)=>{
+      }, (error) => {
         console.log(error)
 
       })
