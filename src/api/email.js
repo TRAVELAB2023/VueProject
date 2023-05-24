@@ -1,8 +1,9 @@
-import { apiInstance } from "./http.js";
+import { apiInstance, checkToken } from "./http.js";
 const email = apiInstance();
-email.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
 
-function sendEmail(param, success, fail) {
+async function sendEmail(param, success, fail) {
+  checkToken();
+  email.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   email.get(`/email/recovery/${param.email}`).then(success).catch(fail);
 }
 

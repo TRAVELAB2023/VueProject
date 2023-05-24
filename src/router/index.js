@@ -5,6 +5,10 @@ import UserJoin from "@/components/user/UserJoin";
 import UserFindPassword from "@/components/user/UserFindPassword";
 import AppBoard from "@/views/board/AppBoard.vue";
 import store from "@/store";
+
+import PlanDetail from "@/components/plan/PlanDetail";
+import PlanList from "@/components/plan/PlanList";
+import PlanShareDetail from "@/components/plan/PlanShareDetail";
 Vue.use(VueRouter);
 
 const onlyAuthUser = async (to, from, next) => {

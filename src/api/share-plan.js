@@ -1,10 +1,15 @@
-import { apiInstance } from "./http.js";
+import { apiInstance, checkToken } from "./http.js";
+
 const plan = apiInstance();
 
-function sharePlan(param, success, fail) {
+async function sharePlan(param, success, fail) {
+  checkToken();
+  plan.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   plan.post("/share/plan", JSON.stringify(param)).then(success).catch(fail);
 }
-function getSharePlan(param, success, fail) {
+async function getSharePlan(param, success, fail) {
+  checkToken();
+  plan.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   plan.get(`/share/plan/${param.key}`).then(success).catch(fail);
 }
 export { sharePlan, getSharePlan };

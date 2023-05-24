@@ -1,19 +1,23 @@
-import { apiInstance } from "./http.js";
-
+import { apiInstance, checkToken } from "./http.js";
 const attraction = apiInstance();
-function getSido(success, fail) {
+
+async function getSido(success, fail) {
+  checkToken();
   attraction.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   attraction.get(`/sido`).then(success).catch(fail);
 }
-function getGugun(param, success, fail) {
+async function getGugun(param, success, fail) {
+  checkToken();
   attraction.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   attraction.get(`/gugun/${param.sido}`).then(success).catch(fail);
 }
-function getAttractionList(param, success, fail) {
+async function getAttractionList(param, success, fail) {
+  checkToken();
   attraction.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   attraction.get(`/attraction`, { params: param }).then(success).catch(fail);
 }
-function getAttraction(param, success, fail) {
+async function getAttraction(param, success, fail) {
+  checkToken();
   attraction.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   attraction.get(`/attraction/${param.contentId}`).then(success).catch(fail);
 }
