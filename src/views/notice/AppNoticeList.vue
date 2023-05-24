@@ -1,18 +1,27 @@
 <template>
   <div class="container align-items-start">
-    <div class="main  ">
+    <div class="main">
       <h2>공지사항</h2>
-      <board-search-menu></board-search-menu>
-      <BoardList v-bind:fields="fields" v-bind:board-list="BoardList"></BoardList>
+      <board-search-menu
+          v-bind:link="linkWrite"
+          @search="search"
+      ></board-search-menu>
+      <BoardList
+          v-bind:fields="fields" v-bind:board-list="BoardList"
+        v-bind:link="linkItem"
+
+      ></BoardList>
       <b-pagination-nav
+
           align="center"
           v-model="currentPage"
-          :number-of-pages="100"
+          :number-of-pages="pageSize"
 
           base-url="#"
           first-number
           last-number
           @input="pageMove"
+
       ></b-pagination-nav>
     </div>
   </div>
@@ -21,17 +30,46 @@
 <script>
 import BoardSearchMenu from "@/components/board/BoardSearchMenu.vue";
 import BoardList from "@/components/board/BoardList.vue";
+import store from "@/store";
+import AppNoticeWrite from "@/views/notice/AppNoticeWrite.vue";
+import {getNoticeList} from "@/api/notice";
 
 export default {
-  name: "AppNoticeList",
+  name: "AppNoticeList.vue",
+  computed: {
+    AppNoticeWrite() {
+      return AppNoticeWrite
+    },
+
+  },
   components: {BoardSearchMenu, BoardList},
+  created() {
+
+    let param = {
+      searchString: this.searchString,
+      searchType: this.searchType,
+      size: this.size,
+      start: this.start
+    }
+
+    this.search(param);
+
+  },
 
   data() {
     return {
+      linkItem:'AppNoticeDetail',
+      searchString: "",
+      searchType: 0,
+      size: 10,
+      start: 0,
       currentPage: 1,
-      fields:[
+      pageSize: 1,
+      linkWrite: "/notice/write",
+
+      fields: [
         {
-          key: 'id',
+          key: 'boardId',
           label: '글번호',
         },
         {
@@ -39,45 +77,45 @@ export default {
           label: '제목',
         },
         {
-          key: 'writer',
-          label: '글쓴이',
-        },{
-          key: 'registertime',
+          key: 'registerTime',
           label: '작성시간'
         },
 
       ],
-      BoardList: [
-        {
-          id: 1,
-          title: "제목1",
-          writer: "글쓴이1",
-          registertime: "2023-05-19"
-        },
-        {
-          id: 2,
-          title: "제목2",
-          writer: "글쓴이2",
-          registertime: "2023-05-19"
-        },
-        {
-          id: 3,
-          title: "제목3",
-          writer: "글쓴이3",
-          registertime: "2023-05-19"
-        }
-      ],
-      methods:{
-        pageMove(){
-          console.log(this.currentPage);
-        }
-      }
+      BoardList: []
+
 
     }
+  },
+
+  methods: {
+    async search(param) {
+      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
+      getNoticeList(
+          param,
+          ({data}) => {
+            console.log(data)
+            this.BoardList = data.list;
+            this.pageSize = data.page;
+          },
+          (error) => {
+            console.log(error)
+          }
+      );
+    },
+    pageMove() {
+      let param = {
+        searchString: this.searchString,
+        searchType: this.searchType,
+        size: this.size,
+        start: this.currentPage - 1
+      }
+      this.search(param);
+    }
   }
-
-
-};
+}
 </script>
 
-<style></style>
+<style scoped>
+
+</style>

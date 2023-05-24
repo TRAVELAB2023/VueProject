@@ -23,7 +23,7 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-button @click="onSubmit" block variant="primary">로그인</b-button>
+        <b-button @click="onSubmit" block variant="warning">로그인</b-button>
         <br />
         <router-link :to="{ name: 'UserFindPassword' }">비밀번호 찾기</router-link> |
         <router-link :to="{ name: 'UserJoin' }">회원가입</router-link>

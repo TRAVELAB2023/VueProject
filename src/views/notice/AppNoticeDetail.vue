@@ -4,35 +4,35 @@
       <div>
 
         <div style="width: 800px;">
-          <h1>{{ title }}</h1>
+          <h1>{{ article.title }}</h1>
           <div class="border">
             <b-row>
-              <b-col>{{ writer }}</b-col>
-              <b-col>작성일시: {{ registerTime }}</b-col>
+              <b-col>작성일시: {{ article.registerTime }}</b-col>
             </b-row>
           </div>
 
         </div>
 
-        <div style="width: 800px" class="border p-5" v-html="content"></div>
+        <div style="width: 800px" class="border p-5" v-html="article.content"></div>
         <div style="width: 800px" class="border p-4">
           <b-row>
             <b-col></b-col>
             <b-col></b-col>
             <b-row>
               <b-col>
-                <b-button>목록</b-button>
+                <b-button @click="moveList">목록</b-button>
               </b-col>
               <b-col>
-                <b-button>수정</b-button>
+                <b-button @click="modify">수정</b-button>
               </b-col>
               <b-col>
-                <b-button>삭제</b-button>
+                <b-button @click="deleteArt">삭제</b-button>
               </b-col>
             </b-row>
           </b-row>
         </div>
         <br>
+
       </div>
 
     </div>
@@ -40,20 +40,59 @@
 </template>
 
 <script>
+import {deleteArticle, getNotice} from "@/api/notice";
+import store from "@/store";
+
+
 export default {
   name: "AppNoticeDetail",
+
+  created() {
+    console.log(this.$store.getters["memberStore/checkUserInfo"]);
+
+    if (this.$route.params.boardId) {
+      this.$store.commit('changeNoticeId', this.$route.params.boardId)
+    }
+    this.boardId = this.$store.getters.getNoticeId
+
+    getNotice(this.boardId, ({data}) => {
+          this.article = data;
+        },
+        (error) => {
+          console.log(error);
+        });
+  },
   data() {
     return {
-      currentPage: 1,
-      title: "글 제목입니다.  ",
-      content: "<div>글입니다</div>" +
-          "<img src='https://edu.ssafy.com/asset/images/logo.png'>",
-      writer: "김싸피",
-      registerTime: "2023-05-19",
-
-
+      linkList: "/notice/list",
+      memberId: this.$store.getters["memberStore/checkUserInfo"].memberId,
+      boardId: 0,
+      article: {},
     };
+  },
+  methods: {
+    async deleteArt(){
+      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
+      deleteArticle(this.boardId,
+          ()=>{
+            this.$router.push(this.linkList)
+          }
+
+          ,()=>{
+            alert('글 삭제 실패')
+          }
+      )
+    },
+    modify() {
+      this.$router.push({name: "AppNoticeModify", params: {boardId: this.boardId}})
+    },
+    moveList() {
+      this.$router.push(this.linkList);
+    },
+
   }
+
+
 }
 </script>
 

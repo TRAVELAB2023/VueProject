@@ -44,7 +44,7 @@ export default {
 }
 nav .navbar-nav a.nav-link {
   font-weight: bold;
-  color: #2c3e50 !important;
+  color: white !important;
 }
 nav {
   padding: 30px;

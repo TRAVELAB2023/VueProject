@@ -11,8 +11,8 @@
 
 
       <input v-if="searchType!=0" type="text" id="search-keyword" v-model="searchString"/>
-      <button @click="search" id="searchBtn" class="btn-primary" style="width: 200px">검색</button>
-      <button @click="movePage" id="createBtn" class="btn-dark" style="width: 200px">글쓰기</button>
+      <button @click="search" id="searchBtn" class="btn-warning" style="color: white; width: 200px">검색</button>
+      <button @click="movePage" id="createBtn" class="btn-info" style="width: 200px">글쓰기</button>
     </div>
   </div>
 </template>

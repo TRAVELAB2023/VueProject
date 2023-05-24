@@ -13,8 +13,10 @@
           ></b-form-input>
           <b-input-group-append>
 
-            <b-button v-if="isEmail==false" variant="info" @click="checkEmail">중복 확인</b-button>
-            <b-button v-if="isEmail==true" variant="info" @click="checkEmail">힝</b-button>
+            <b-button v-if="isEmail==false" variant="danger
+" @click="checkEmail">중복 확인
+            </b-button>
+            <!--            <b-button v-if="isEmail==true" variant="success" @click="checkEmail">힝</b-button>-->
           </b-input-group-append>
         </b-input-group>
       </b-form-group>
@@ -28,8 +30,10 @@
               required
           ></b-form-input>
           <b-input-group-append>
-            <b-button v-if="isNickname==false" variant="info" @click="checkNickName">중복 확인</b-button>
-            <b-button v-if="isNickname==true" variant="info" @click="checkNickName">힝</b-button>
+            <b-button v-if="isNickname==false" variant="danger
+" @click="checkNickName">중복 확인
+            </b-button>
+            <!--            <b-button v-if="isNickname==true" variant="info" @click="checkNickName">힝</b-button>-->
           </b-input-group-append>
         </b-input-group>
       </b-form-group>
@@ -54,7 +58,7 @@
         마케팅 동의
       </b-form-checkbox>
 
-      <b-button @click="onSubmit" block variant="primary">회원가입</b-button>
+      <b-button @click="onSubmit" block variant="warning">회원가입</b-button>
     </b-card>
   </div>
 </template>
@@ -98,14 +102,13 @@ export default {
         nickname: this.nickname,
         password: this.password
       }
-      await join(param, () =>{
+      await join(param, () => {
             alert('회원가입 완료');
             this.$router.push("/user/login");
-      },(e)=>{
+          }, (e) => {
             console.log(e)
             alert('회원가입 실패')
-      }
-
+          }
       );
     },
     checkNickName() {
@@ -113,7 +116,7 @@ export default {
           ({data}) => {
             if (data == '중복') {
               alert('사용할 수 없는 닉네임입니다.')
-            }else {
+            } else {
               alert('사용할 수 있는 닉네임입니다.')
               this.isNickname = true;
             }
@@ -126,7 +129,7 @@ export default {
           ({data}) => {
             if (data == '중복') {
               alert('사용할 수 없는 이메일입니다.')
-            } else if(data=='잘못된 형식'){
+            } else if (data == '잘못된 형식') {
               alert('잘못된 형식의 이메일입니다.')
             } else {
               alert('사용할 수 있는 이메일입니다.')

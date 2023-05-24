@@ -1,27 +1,35 @@
 <template>
   <div>
-    <input type="file" @change="uploadFunction" id="file" hidden>
+    <div class="main">
+      <h2>여행 후기</h2>
 
-    <div className="example">
-      <div><input style="width: 100%;" placeholder="제목" v-model="title"></div>
-      <quill-editor
-          v-model="content"
-          ref="myTextEditor"
-          :disabled="false"
-          :options="editorOption"
-      />
-      <!--      <div className="output ql-snow">-->
-      <!--        <div v-html="content"></div>-->
-      <!--      </div>-->
-      <b-row style="float: right;">
-        <b-col>
-          <b-button @click="moveList">목록</b-button>
-        </b-col>
-        <b-col>
-          <b-button @click="submitPost">작성</b-button>
-        </b-col>
-      </b-row>
+      <div style="height: 20px"></div>
+      <div  variant="outline-primary" style="height: 450px;">
+        <input type="file" @change="uploadFunction" id="file" hidden>
+
+        <div className="example">
+          <div><input style="width: 100%;" placeholder="제목" v-model="article.title"></div>
+          <quill-editor
+              v-model="article.content"
+              ref="myTextEditor"
+              :disabled="false"
+              :options="editorOption"
+          />
+          <!--      <div className="output ql-snow">-->
+          <!--        <div v-html="content"></div>-->
+          <!--      </div>-->
+          <b-row style="float: right;">
+            <b-col>
+              <b-button @click="moveList">목록</b-button>
+            </b-col>
+            <b-col>
+              <b-button @click="submitPost">수정</b-button>
+            </b-col>
+          </b-row>
+        </div>
+      </div>
     </div>
+
   </div>
 
 </template>
@@ -36,31 +44,27 @@ import "highlight.js/styles/tomorrow.css";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import {postImage} from "@/api/board";
+import {getNotice, putArticle} from "@/api/notice";
 // import {postImage} from "@/api/board";
 
 export default {
-  name: "quill-example-snow",
-  title: "Theme: snow",
   components: {
     quillEditor,
   },
 
-  props: [
-    'event',
-    'listLink'
-  ],
   created() {
-
+    getNotice(this.id,({data})=>
+        this.article=data,(error)=>
+        console.log(error)
+    )
   },
   data() {
     return {
-      memberId: this.$store.getters["memberStore/checkUserInfo"].memberId,
-      title: '',
+      id: this.$route.params.boardId,
+      article:{},
       editorOption: {
-        placeholder: "place holder test",
+        placeholder: "글을 작성하세요",
         modules: {
-
-
           toolbar: {
             handlers: {
               'image': function () {
@@ -89,19 +93,16 @@ export default {
           },
         },
       },
-      content: ''
     };
   },
   methods: {
     moveList() {
-      this.$router.push(this.listLink);
+      this.$router.push('/notice/list');
     },
 
     uploadFunction(e) {
       this.selectedFile = e.target.files[0];
-      console.log(this.selectedFile)
       postImage(this.selectedFile, (r => {
-        console.log(r)
 
         //this code to set your position cursor
         const range = this.$refs.myTextEditor.quill.getSelection()
@@ -112,24 +113,18 @@ export default {
       });
       // postImage(this.selectedFile,({}))
     },
-    updateUrl: function (image) {
-      console.log(image)
-      console.log('!!!!!!!');
-
-
-      //
-    },
     submitPost() {
       let param = {
-        title: this.title,
-        content: this.content,
-        memberId: this.memberId,
+        id: this.id,
+        title: this.article.title,
+        content: this.article.content,
       }
 
-      this.event(param, () => this.$router.push(this.listLink), (e) => {
-        console.log(e)
-        this.$router.push(this.listLink)
-      });
+
+      putArticle(param, ({data}) =>{
+        console.log(data)
+        this.$router.push('/notice/list')
+      } , (e) => console.log(e));
 
 
     },

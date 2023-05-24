@@ -8,6 +8,7 @@
       ></board-search-menu>
       <BoardList
           v-bind:fields="fields" v-bind:board-list="BoardList"
+          v-bind:link="linkItem"
 
 
       ></BoardList>
@@ -20,6 +21,7 @@
           first-number
           last-number
           @input="pageMove"
+          class="customPagination"
       ></b-pagination-nav>
     </div>
   </div>
@@ -31,10 +33,14 @@ import BoardList from "@/components/board/BoardList.vue";
 import AppBoardWrite from "@/views/board/AppBoardWrite.vue";
 import {getBoardList} from "@/api/board";
 import store from "@/store";
+import AppBoardDetail from "@/views/board/AppBoardDetail.vue";
 
 export default {
   name: "AppBoardList.vue",
   computed: {
+    AppBoardDetail() {
+      return AppBoardDetail
+    },
     AppBoardWrite() {
       return AppBoardWrite
     },
@@ -56,6 +62,7 @@ export default {
 
   data() {
     return {
+      linkItem: 'AppBoardDetail',
       searchString: "",
       searchType: 0,
       size: 10,
@@ -124,5 +131,14 @@ export default {
 </script>
 
 <style scoped>
+.customPagination > li > a {
+  color: red;
+}
 
+.customPagination > li.active > a,
+.customPagination > li > a:hover
+{
+  color: white;
+  background-color: green!important;
+}
 </style>

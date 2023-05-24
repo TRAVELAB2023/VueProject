@@ -91,7 +91,6 @@ export default {
   name: "AppBoardDetail",
 
   created() {
-    console.log(this.$store.getters["memberStore/checkUserInfo"]);
 
     if (this.$route.params.boardId) {
       this.$store.commit('changeBoardId', this.$route.params.boardId)
@@ -115,15 +114,18 @@ export default {
     };
   },
   methods: {
-   async deleteArt(){
+    async deleteArt() {
       await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       deleteArticle(this.boardId,
-          ()=>{
+          () => {
             this.$router.push(this.linkList)
           }
-
-          ,()=>{
-        alert('글 작성 실패')
+          , (error) => {
+            if (error.response.status == 401) {
+              alert('권한이 존재하지 않습니다.')
+            }else{
+              alert('글 삭제에 실패했습니다.')
+            }
           }
       )
     },

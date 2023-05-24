@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     boardId: "0",
+    noticeId: "0",
     myAttractionList: [], // sidebar에 관광지 리스트
     mapAttractionsList: [], // 맵에 띄우는 관광지 리스트
   },
@@ -15,10 +16,16 @@ export default new Vuex.Store({
     getBoardId(state) {
       return state.boardId;
     },
+    getNoticeId(state) {
+      return state.noticeId
+    },
   },
   mutations: {
     changeBoardId(state, boardId) {
       state.boardId = boardId;
+    },
+    changeNoticeId(state, noticeId) {
+      state.noticeId=noticeId;
     },
     pushAttraction(state, attraction) {
       state.myAttractionList.push({

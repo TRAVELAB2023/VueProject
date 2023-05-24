@@ -1,6 +1,6 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="info">
-    <b-navbar-brand href="#">로고</b-navbar-brand>
+  <b-navbar toggleable="lg" type="dark" variant="warning">
+    <b-navbar-brand href="#"><img style="width: 100px" src="@/assets/logo.png"></b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="nav-list">

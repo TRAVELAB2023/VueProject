@@ -34,14 +34,9 @@ export default {
   },
    created() {
     this.boardId = this.$route.params.boardId;
-
   },
   components:{
     Editor
   },
-
-  methods: {
-
-  }
 };
 </script>

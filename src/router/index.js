@@ -89,8 +89,16 @@ const routes = [
           component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeWrite.vue"),
         },{
           path: "detail",
+          name: 'AppNoticeDetail',
           component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeDetail.vue"),
         },
+        {
+          path: "modify",
+          name: 'AppNoticeModify',
+          props:true,
+          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeModify.vue"),
+        },
+
       ]
   },
   {
