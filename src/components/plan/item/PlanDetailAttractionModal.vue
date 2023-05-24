@@ -40,6 +40,7 @@
 <script>
 import { hasLover, clickLover } from "@/api/lovers";
 import { mapMutations } from "vuex";
+import store from "@/store";
 export default {
   name: "PlanDetailAttractionModal",
   props: {
@@ -73,7 +74,8 @@ export default {
       this.show = false;
       this.resetModal();
     },
-    clickLover() {
+    async clickLover() {
+      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       const param = {
         attractionId: this.attraction.contentId,
       };
@@ -91,7 +93,8 @@ export default {
         }
       );
     },
-    checkLover() {
+   async checkLover() {
+      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       const param = {
         attractionid: this.attraction.contentId,
       };
@@ -104,8 +107,9 @@ export default {
             this.isLover = false;
           }
         },
-        () => {
-          alert("서버와 연결이 원활하지 않습니다.,");
+        (e) => {
+          console.log(e)
+          // alert("서버와 연결이 원활하지 않습니다.,");
         }
       );
     },

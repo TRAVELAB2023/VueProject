@@ -1,6 +1,7 @@
 <template>
   <div class="container align-items-start">
     <div class="main">
+      <div style="height: 10px;"></div>
       <h2>여행 후기</h2>
       <board-search-menu
           v-bind:link="linkWrite"

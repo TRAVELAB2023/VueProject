@@ -116,17 +116,17 @@ const routes = [
       {
         path: "list",
         name: "PlanList",
-        component: PlanList,
+        component: () => import(/* webpackChunkName: "Plan" */ "@/components/plan/PlanList.vue"),
       },
       {
         path: "detail/:planid",
         name: "PlanDetail",
-        component: PlanDetail,
+        component: () => import(/* webpackChunkName: "Plan" */ "@/components/plan/PlanDetail.vue"),
       },
       {
         path: "share/:key",
         name: "PlanShareDetail",
-        component: PlanShareDetail,
+        component: () => import(/* webpackChunkName: "Plan" */ "@/components/plan/PlanShareDetail.vue"),
       },
     ],
   },

@@ -63,6 +63,7 @@ export default new Vuex.Store({
           this.commit("initMapAttractionList", data);
         },
         (error) => {
+          console.log(error)
           this.commit("initMapAttractionList", []);
           alert(error.response.data);
         }
