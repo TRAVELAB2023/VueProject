@@ -10,17 +10,17 @@
         <div class="select-area d-flex justify-content-around align-items-center">
           <b-form-select v-model="selectedSido" :options="sidoOptions">
             <template #first>
-              <b-form-select-option :value="0" disabled>-- 지역 선택 --</b-form-select-option>
+              <b-form-select-option :value="0">-- 지역 전체 선택 --</b-form-select-option>
             </template>
           </b-form-select>
           <b-form-select v-model="selectedGugun" :options="gugunOptions">
             <template #first>
-              <b-form-select-option :value="0" disabled>-- 시군구 선택 --</b-form-select-option>
+              <b-form-select-option :value="0">-- 시군구 전체 선택 --</b-form-select-option>
             </template>
           </b-form-select>
           <b-form-select v-model="selectedContentType" :options="contentTypeOptions">
             <template #first>
-              <b-form-select-option :value="0" disabled>-- 관광지 유형 --</b-form-select-option>
+              <b-form-select-option :value="0">-- 관광지 전체 선택 --</b-form-select-option>
             </template>
           </b-form-select>
           <b-form-input size="10" v-model="word" @keyup.enter="search"></b-form-input>
@@ -37,6 +37,11 @@
         </div>
 
         <KakaoMap></KakaoMap>
+        <b-overlay :show="show" rounded="sm">
+          <b-card title="AI 추천 관광지" :aria-hidden="show ? 'true' : null">
+            <b-card-text>{{ AItext }}</b-card-text>
+          </b-card>
+        </b-overlay>
       </div>
       <plan-list-side-bar @hidden="rollback" @shown="pushContent"></plan-list-side-bar>
     </div>
@@ -44,6 +49,7 @@
 </template>
 
 <script>
+import { sendMessage } from "@/api/chat";
 import { mapActions } from "vuex";
 import { getSido, getGugun } from "@/api/attraction.js";
 import PlanListSideBar from "@/components/plan/PlanListSideBar";
@@ -60,7 +66,6 @@ export default {
       gugunOptions: [],
       sidoOptions: [],
       contentTypeOptions: [
-        { value: "0", text: "전체" },
         { value: "12", text: "관광지" },
         { value: "14", text: "문화시설" },
         { value: "15", text: "축제공연행사" },
@@ -70,7 +75,9 @@ export default {
         { value: "38", text: "쇼핑" },
         { value: "39", text: "음식점" },
       ],
-      isPush: false,
+      isPush: false, // sidebar 열릴 시 이벤트 처리
+      show: false, // gpt 응답 overlay 여부
+      AItext: "", // gpt 응답값
     };
   },
   components: { KakaoMap, PlanListSideBar },
@@ -91,9 +98,38 @@ export default {
         memberLike: this.memberLike,
       };
       this.getMapAttractionList(params);
+
+      this.searchChatGPT();
     },
     initGugun() {
       this.gugunOptions = [];
+    },
+    async searchChatGPT() {
+      this.show = true;
+      let sido = this.sidoOptions.find((sido) => {
+        return this.selectedSido == sido.value;
+      });
+      let gugun = this.gugunOptions.find((gugun) => {
+        return this.selectedGugun == gugun.value;
+      });
+      let contentType = this.contentTypeOptions.find((contentType) => {
+        return this.selectedContentType == contentType.value;
+      });
+      const param = {
+        sidoName: sido === undefined ? "한국의" : sido.text,
+        gugunName: gugun === undefined ? "전체" : gugun.text,
+        contentTypeName: contentType === undefined ? "관광지" : contentType.text,
+      };
+      await sendMessage(
+        param,
+        ({ data }) => {
+          this.AItext = data;
+        },
+        () => {
+          alert("서버와 연결이 원활하지 않습니다. 다시 요청해주세요");
+        }
+      );
+      this.show = false;
     },
   },
   watch: {
