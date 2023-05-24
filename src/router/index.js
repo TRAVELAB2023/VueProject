@@ -21,11 +21,9 @@ const onlyAuthUser = async (to, from, next) => {
   if (!checkToken || checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
     // next({ name: "login" });
-    if(from.name!='UserLogin'){
-
+    if (from.name != "UserLogin") {
       router.push({ name: "UserLogin" });
     }
-
   } else {
     console.log("로그인 했다!!!!!!!!!!!!!.");
     next();
@@ -33,7 +31,6 @@ const onlyAuthUser = async (to, from, next) => {
 };
 
 const routes = [
-
   {
     path: "/",
     redirect: "/user/login",
@@ -53,25 +50,29 @@ const routes = [
     children: [
       {
         path: "detail",
-        name: 'AppBoardDetail',
-        props:true,
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardDetail.vue"),
+        name: "AppBoardDetail",
+        props: true,
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardDetail.vue"),
       },
       {
         path: "modify",
-        name: 'AppBoardModify',
-        props:true,
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardModify.vue"),
+        name: "AppBoardModify",
+        props: true,
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardModify.vue"),
       },
       {
         path: "list",
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardList.vue"),
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardList.vue"),
       },
       {
         path: "write",
-        component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardWrite.vue"),
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/board/AppBoardWrite.vue"),
       },
-    ]
+    ],
   },
   {
     path: "/notice",
@@ -79,33 +80,55 @@ const routes = [
     redirect: "/notice/list",
     beforeEnter: onlyAuthUser,
     component: () => import(/* webpackChunkName: "board" */ "@/views/notice/AppNotice.vue"),
-      children: [
-        {
-          path: "list",
-          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeList.vue"),
-        },
-        {
-          path: "write",
-          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeWrite.vue"),
-        },{
-          path: "detail",
-          name: 'AppNoticeDetail',
-          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeDetail.vue"),
-        },
-        {
-          path: "modify",
-          name: 'AppNoticeModify',
-          props:true,
-          component: () => import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeModify.vue"),
-        },
-
-      ]
+    children: [
+      {
+        path: "list",
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeList.vue"),
+      },
+      {
+        path: "write",
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeWrite.vue"),
+      },
+      {
+        path: "detail",
+        name: "AppNoticeDetail",
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeDetail.vue"),
+      },
+      {
+        path: "modify",
+        name: "AppNoticeModify",
+        props: true,
+        component: () =>
+          import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeModify.vue"),
+      },
+    ],
   },
   {
     path: "/plan",
     name: "AppPlan",
+    redirect: "/plan/list",
     beforeEnter: onlyAuthUser,
     component: () => import(/* webpackChunkName: "Plan" */ "@/views/AppPlan.vue"),
+    children: [
+      {
+        path: "list",
+        name: "PlanList",
+        component: PlanList,
+      },
+      {
+        path: "detail/:planid",
+        name: "PlanDetail",
+        component: PlanDetail,
+      },
+      {
+        path: "share/:key",
+        name: "PlanShareDetail",
+        component: PlanShareDetail,
+      },
+    ],
   },
   {
     path: "/createplan",
