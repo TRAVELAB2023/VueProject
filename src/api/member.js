@@ -28,6 +28,14 @@ async function duplicateCheckNickname(nickname, success, fail) {
   await api.get(`auth/check-duplicate-nickname/${nickname}`).then(success).catch(fail);
 }
 async function join(param, success, fail) {
-  await api.post(`auth/register/`,JSON.stringify(param)).then(success).catch(fail);
+  await api.post(`auth/register/`, JSON.stringify(param)).then(success).catch(fail);
 }
-export { login, findById, tokenRegeneration, logout, duplicateCheckEmail, duplicateCheckNickname, join};
+export {
+  login,
+  findById,
+  tokenRegeneration,
+  logout,
+  duplicateCheckEmail,
+  duplicateCheckNickname,
+  join,
+};

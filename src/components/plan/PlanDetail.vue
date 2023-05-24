@@ -77,6 +77,7 @@ export default {
       },
       (error) => {
         alert(error.response.data);
+        this.$router.push({ name: "PlanList" });
       }
     );
   },
