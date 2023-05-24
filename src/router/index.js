@@ -6,9 +6,6 @@ import UserFindPassword from "@/components/user/UserFindPassword";
 import AppBoard from "@/views/board/AppBoard.vue";
 import store from "@/store";
 
-import PlanDetail from "@/components/plan/PlanDetail";
-import PlanList from "@/components/plan/PlanList";
-import PlanShareDetail from "@/components/plan/PlanShareDetail";
 Vue.use(VueRouter);
 
 const onlyAuthUser = async (to, from, next) => {
@@ -114,17 +111,19 @@ const routes = [
     path: "/plan",
     name: "AppPlan",
     redirect: "/plan/list",
-    beforeEnter: onlyAuthUser,
+
     component: () => import(/* webpackChunkName: "Plan" */ "@/views/AppPlan.vue"),
     children: [
       {
         path: "list",
         name: "PlanList",
+        beforeEnter: onlyAuthUser,
         component: () => import(/* webpackChunkName: "Plan" */ "@/components/plan/PlanList.vue"),
       },
       {
         path: "detail/:planid",
         name: "PlanDetail",
+        beforeEnter: onlyAuthUser,
         component: () => import(/* webpackChunkName: "Plan" */ "@/components/plan/PlanDetail.vue"),
       },
       {
