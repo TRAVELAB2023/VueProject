@@ -18,7 +18,7 @@
             <em>계정</em>
           </template>
           <b-dropdown-item :to="{ name: 'UserLogin' }">로그인</b-dropdown-item>
-          <b-dropdown-item href="#">내 정보</b-dropdown-item>
+          <b-dropdown-item @click="info">내 정보</b-dropdown-item>
           <b-dropdown-item @click="logout" href="#">로그아웃</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -38,10 +38,13 @@ export default {
   name: "HeaderNavBar",
   methods:{
    async logout() {
-     console.log(this.email);
      await store.dispatch("memberStore/userLogout",this.email);
      this.$router.push("/user/login")
     },
+     info(){
+     this.$router.push("/user/info")
+
+    }
   }
 };
 </script>
