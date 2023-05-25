@@ -3,7 +3,7 @@ import { apiInstance, checkToken } from "./http.js";
 const plan = apiInstance();
 
 async function sharePlan(param, success, fail) {
-  checkToken();
+  await checkToken();
   plan.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   plan.post("/share/plan", JSON.stringify(param)).then(success).catch(fail);
 }
