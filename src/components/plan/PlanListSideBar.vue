@@ -88,6 +88,7 @@ export default {
     },
   },
   created() {
+    this.state = false;
     this.change();
   },
   updated() {
