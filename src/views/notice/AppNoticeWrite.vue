@@ -1,6 +1,6 @@
 <template>
-  <div className="container align-items-start">
-    <div className="main">
+  <div class="container align-items-start">
+    <div class="main">
       <h2>공지사항</h2>
 
       <div style="height: 20px"></div>

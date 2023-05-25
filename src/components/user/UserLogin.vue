@@ -55,11 +55,13 @@ export default {
       await this.userConfirm(this.form);
 
       let token = sessionStorage.getItem("auth-token");
-      // console.log("1. confirm() token >> " + token);
+      console.log("1. confirm() token >> " + token);
       if (this.isLogin) {
         await this.getUserInfo(token);
-        // console.log("4. confirm() userInfo :: ", this.userInfo);
-        this.$router.push('/main');
+        console.log("4. confirm() userInfo :: ", this.userInfo);
+        this.form.email=null,
+            this.form.password=null
+         this.$router.push('/main');
       }
     },
   },

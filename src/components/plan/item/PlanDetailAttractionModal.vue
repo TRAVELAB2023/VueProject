@@ -25,8 +25,11 @@
           <div class="text-end" v-if="curType == 'add'">
             <b-button variant="primary" id="addTravel" @click="push">여행지 추가하기</b-button>
           </div>
-          <img class="lovers" v-if="isLover" @click="clickLover" src="@/assets/lovers-fill.png" />
-          <img class="lovers" v-else src="@/assets/lovers-empty.png" @click="clickLover" />
+          <div v-if="isLogin">
+            <img class="lovers" v-if="isLover" @click="clickLover" src="@/assets/lovers-fill.png" />
+            <img class="lovers" v-else src="@/assets/lovers-empty.png" @click="clickLover" />
+          </div>
+
         </div>
       </div>
     </div>
@@ -39,7 +42,7 @@
 
 <script>
 import { hasLover, clickLover } from "@/api/lovers";
-import { mapMutations } from "vuex";
+import { mapMutations,mapState } from "vuex";
 import store from "@/store";
 export default {
   name: "PlanDetailAttractionModal",
@@ -64,6 +67,9 @@ export default {
       },
     };
   },
+  computed:{
+    ...mapState("memberStore",["isLogin"])
+  },
   methods: {
     ...mapMutations(["pushAttraction"]),
     resetModal() {
@@ -75,6 +81,9 @@ export default {
       this.resetModal();
     },
     async clickLover() {
+      if (!this.isLogin) {
+        return
+      }
       await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       const param = {
         attractionId: this.attraction.contentId,
@@ -94,6 +103,9 @@ export default {
       );
     },
    async checkLover() {
+     if (!this.isLogin) {
+       return
+     }
       await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       const param = {
         attractionid: this.attraction.contentId,

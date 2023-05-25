@@ -1,6 +1,7 @@
 <template>
-  <div class="container align-items-start">
+  <div data-sal="zoom-in" data-sal-delay="500" data-sal-easing="ease-out-back" class="container align-items-start">
     <div class="main">
+      <div style="height: 10px;"></div>
       <h2>공지사항</h2>
       <board-search-menu
           v-bind:link="linkWrite" v-bind:flaglink="flaglink"
@@ -33,7 +34,7 @@ import BoardList from "@/components/board/BoardList.vue";
 import store from "@/store";
 import AppNoticeWrite from "@/views/notice/AppNoticeWrite.vue";
 import {getNoticeList} from "@/api/notice";
-
+import sal from 'sal.js';
 export default {
   name: "AppNoticeList.vue",
   computed: {
@@ -55,7 +56,7 @@ export default {
     }
 
     this.search(param);
-
+    sal();
   },
 
   data() {
@@ -95,12 +96,15 @@ export default {
   methods: {
     async search(param) {
       await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
-      getNoticeList(
+      await getNoticeList(
           param,
           ({data}) => {
             console.log(data)
             this.BoardList = data.list;
-            this.pageSize = data.page;
+            if(data.page!=0)
+            {
+              this.pageSize = data.page;
+            }
           },
           (error) => {
             console.log(error)

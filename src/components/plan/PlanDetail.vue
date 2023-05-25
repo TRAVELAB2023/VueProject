@@ -57,6 +57,7 @@ export default {
   },
   data() {
     return {
+
       attractionList: [],
       show: false, // 모달 창 show 여부
       showBottom: false, // 공유하기 창 show 여부

@@ -1,29 +1,32 @@
 <template>
-  <div>
-    <h2>여행 계획 리스트</h2>
-    <b-table
-      selectable
-      striped
-      hover
-      :items="planList"
-      :fields="fields"
-      @row-selected="onRowSelected"
-    ></b-table>
 
-    <b-pagination-nav
-      align="center"
-      v-model="currentPage"
-      :number-of-pages="pageSize"
-      base-url="#"
-      first-number
-      last-number
-      @input="pageMove"
-    ></b-pagination-nav>
+  <div data-sal="zoom-in" data-sal-delay="500" data-sal-easing="ease-out-back" class="container align-items-start">
+    <div class="main">
+      <div style="height: 10px;"></div>
+      <h2>여행 계획 리스트</h2>
+      <b-table
+          selectable
+          striped
+          hover
+          :items="planList"
+          :fields="fields"
+          @row-selected="onRowSelected"
+      ></b-table>
+
+      <b-pagination-nav
+          align="center"
+          v-model="currentPage"
+          :number-of-pages="pageSize"
+          @input="pageMove"
+      ></b-pagination-nav>
+    </div>
+
   </div>
 </template>
 
 <script>
 import { getPlanList } from "@/api/plan";
+import sal from 'sal.js'
 export default {
   name: "PlanList",
   data() {
@@ -73,6 +76,7 @@ export default {
           alert(error.response.data);
         }
       );
+      sal();
     },
   },
   created() {

@@ -95,21 +95,23 @@ export default {
         alert("닉네임을 확인해주세요.")
       } else if (this.password == "") {
         alert("비밀번호를 확인해주세요.")
+      }else{
+        let param = {
+          email: this.email,
+          marketing: this.checked,
+          nickname: this.nickname,
+          password: this.password
+        }
+        await join(param, () => {
+              alert('회원가입 완료');
+              this.$router.push("/user/login");
+            }, (e) => {
+              console.log(e)
+              alert('회원가입 실패')
+            }
+        );
       }
-      let param = {
-        email: this.email,
-        marketing: this.checked,
-        nickname: this.nickname,
-        password: this.password
-      }
-      await join(param, () => {
-            alert('회원가입 완료');
-            this.$router.push("/user/login");
-          }, (e) => {
-            console.log(e)
-            alert('회원가입 실패')
-          }
-      );
+
     },
     checkNickName() {
       duplicateCheckNickname(this.nickname,

@@ -5,7 +5,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="nav-list">
         <b-nav-item :to="{ name: 'AppNotice' }">공지사항</b-nav-item>
-        <b-nav-item :to="{ name: 'AppCreatePlan' }">계획 짜기 </b-nav-item>
+        <b-nav-item :to="{ name: 'AppCreatePlan' }">계획 짜기</b-nav-item>
         <b-nav-item :to="{ name: 'AppBoard' }">후기</b-nav-item>
         <b-nav-item :to="{ name: 'AppPlan' }">나의 계획</b-nav-item>
       </b-navbar-nav>
@@ -17,9 +17,13 @@
           <template #button-content>
             <em>계정</em>
           </template>
-          <b-dropdown-item :to="{ name: 'UserLogin' }">로그인</b-dropdown-item>
-          <b-dropdown-item @click="info">내 정보</b-dropdown-item>
-          <b-dropdown-item @click="logout" href="#">로그아웃</b-dropdown-item>
+          <template v-if="user">
+            <b-dropdown-item @click="info">내 정보</b-dropdown-item>
+            <b-dropdown-item @click="logout" href="#">로그아웃</b-dropdown-item>
+          </template>
+          <template v-else>
+            <b-dropdown-item :to="{ name: 'UserLogin' }">로그인</b-dropdown-item>
+          </template>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -28,25 +32,39 @@
 
 <script>
 import store from "@/store";
+import {mapState} from "vuex";
+
 export default {
-  data(){
-    return{
-      email: this.$store.getters["memberStore/checkUserInfo"].email,
+  data() {
+    return {
+      user: {},
+
     }
   },
 
   name: "HeaderNavBar",
-  methods:{
-   async logout() {
-     await store.dispatch("memberStore/userLogout",this.email);
-     this.$router.push("/user/login")
+  computed: {
+    ...mapState("memberStore", ["userInfo"]),
+  },
+  methods: {
+    async logout() {
+      await store.dispatch("memberStore/userLogout", this.user.email);
+      this.$router.push("/user/login");
+
     },
-     info(){
-     this.$router.push("/user/info")
+    info() {
+      this.$router.push("/user/info")
 
     }
-  }
-};
+  },
+  watch: {
+    userInfo(newVal) {
+      this.user = newVal;
+    },
+  },
+
+}
+
 </script>
 
 <style></style>

@@ -6,6 +6,7 @@ import UserFindPassword from "@/components/user/UserFindPassword";
 import AppBoard from "@/views/board/AppBoard.vue";
 import store from "@/store";
 import UserInfo from "@/components/user/UserInfo.vue";
+import UserCheckAuth from "@/components/user/UserCheckAuth.vue";
 
 Vue.use(VueRouter);
 
@@ -171,6 +172,11 @@ const routes = [
                 path: "info",
                 name: "UserInfo",
                 component: UserInfo,
+            },{
+            path: "check/:key",
+                name: "UserCheck",
+                component: UserCheckAuth,
+
             }
         ],
     },

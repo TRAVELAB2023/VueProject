@@ -17,8 +17,6 @@ async function getAttractionList(param, success, fail) {
   attraction.get(`/attraction`, { params: param }).then(success).catch(fail);
 }
 async function getAttraction(param, success, fail) {
-  await checkToken();
-  attraction.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   attraction.get(`/attraction/${param.contentId}`).then(success).catch(fail);
 }
 export { getSido, getGugun, getAttraction, getAttractionList };
