@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-sal="zoom-out" data-sal-delay="1000" data-sal-easing="ease-out-back">
     <h2>여행 계획 리스트</h2>
     <b-table
       selectable
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import sal from "sal.js";
 import { getPlanList } from "@/api/plan";
 export default {
   name: "PlanList",
@@ -57,13 +58,13 @@ export default {
     pageMove() {
       this.initPage();
     },
-    initPage() {
+    async initPage() {
       let param = {
         size: this.size,
         page: this.currentPage - 1,
         sort: this.sort,
       };
-      getPlanList(
+      await getPlanList(
         param,
         ({ data }) => {
           this.pageSize = data.totalPage;
@@ -73,6 +74,7 @@ export default {
           alert(error.response.data);
         }
       );
+      sal();
     },
   },
   created() {

@@ -14,7 +14,6 @@
 import { mapState } from "vuex";
 import { getAttraction } from "@/api/attraction";
 import PlanDetailAttractionModal from "./plan/item/PlanDetailAttractionModal";
-import store from "@/store";
 export default {
   name: "KakaoMap",
   components: { PlanDetailAttractionModal },
@@ -62,10 +61,10 @@ export default {
       });
     },
     locateMap() {
+      this.initMap();
       if (this.mapAttractionsList.length == 0) {
         return;
       }
-      this.initMap();
       this.moveMap(this.mapAttractionsList[0]);
       var markers = this.mapAttractionsList.map((data) => {
         let marker = new kakao.maps.Marker({
@@ -95,8 +94,7 @@ export default {
       this.map.setLevel(level, { anchor: this.map.getCenter() });
       // 지도 중심을 이동 시킵니다
     },
-    async showModal(contentId) {
-      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
+    showModal(contentId) {
       const param = {
         contentId: contentId,
       };

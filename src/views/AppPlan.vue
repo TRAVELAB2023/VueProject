@@ -14,4 +14,6 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+@import "../../node_modules/sal.js/dist/sal.css";
+</style>

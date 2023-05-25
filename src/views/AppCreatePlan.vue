@@ -3,6 +3,7 @@
     <div class="container">
       <div :class="{ pushed: isPush, pulled: !isPush, main: true }">
         <div class="d-flex justify-content-end">
+          <b-button variant="danger" @click="initMap">지도 초기화</b-button>
           <b-button v-b-toggle.sidebar-right>여행지 등록 목록 열기</b-button>
         </div>
         <h2>여행지 검색</h2>
@@ -50,7 +51,7 @@
 
 <script>
 import { sendMessage } from "@/api/chat";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import { getSido, getGugun } from "@/api/attraction.js";
 import PlanListSideBar from "@/components/plan/PlanListSideBar";
 import KakaoMap from "@/components/TheKakaoMap";
@@ -83,11 +84,18 @@ export default {
   components: { KakaoMap, PlanListSideBar },
   methods: {
     ...mapActions(["getMapAttractionList"]),
+    ...mapMutations(["initMapAttractionList"]),
     rollback() {
       this.isPush = false;
     },
     pushContent() {
       this.isPush = true;
+    },
+    initMap() {
+      if (!confirm("지도를 초기화하겠습니까?")) {
+        return;
+      }
+      this.initMapAttractionList([]);
     },
     search() {
       const params = {
