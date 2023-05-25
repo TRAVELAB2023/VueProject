@@ -31,7 +31,6 @@ import hljs from "highlight.js";
 import {quillEditor} from 'vue-quill-editor'
 // highlight.js style
 import "highlight.js/styles/tomorrow.css";
-
 // import theme style
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -59,7 +58,6 @@ export default {
       editorOption: {
         placeholder: "place holder test",
         modules: {
-
 
           toolbar: {
             handlers: {
@@ -144,3 +142,5 @@ export default {
   },
 };
 </script>
+<style>
+</style>

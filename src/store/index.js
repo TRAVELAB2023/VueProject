@@ -11,6 +11,8 @@ export default new Vuex.Store({
     noticeId: "0",
     myAttractionList: [], // sidebar에 관광지 리스트
     mapAttractionsList: [], // 맵에 띄우는 관광지 리스트
+    boardWrite: true,
+    noticeWrite: false,
   },
   getters: {
     getBoardId(state) {
@@ -19,8 +21,17 @@ export default new Vuex.Store({
     getNoticeId(state) {
       return state.noticeId
     },
+    getBoardWrite(state) {
+      return state.boardWrite
+    },
+    getNoticeWrite(state) {
+      return state.noticeWrite
+    },
   },
   mutations: {
+    changeNoticeWrite(state, flag) {
+      state.noticeWrite=flag;
+    },
     changeBoardId(state, boardId) {
       state.boardId = boardId;
     },

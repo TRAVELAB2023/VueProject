@@ -15,7 +15,7 @@
 
         </div>
 
-        <div style="width: 800px" class="border p-5" v-html="article.content"></div>
+        <div style="width: 800px" class="quillEditor border p-5" v-html="article.content"></div>
         <div style="width: 800px" class="border p-4">
           <b-row>
             <b-col></b-col>
@@ -24,10 +24,11 @@
               <b-col>
                 <b-button @click="moveList">목록</b-button>
               </b-col>
-              <b-col>
+
+              <b-col v-if="isMyPost">
                 <b-button @click="modify">수정</b-button>
               </b-col>
-              <b-col>
+              <b-col v-if="isMyPost">
                 <b-button @click="deleteArt">삭제</b-button>
               </b-col>
             </b-row>
@@ -84,7 +85,6 @@
 
 <script>
 import {deleteArticle, getBoard, postComment} from "@/api/board";
-import store from "@/store";
 
 
 export default {
@@ -99,6 +99,9 @@ export default {
 
     getBoard(this.boardId, ({data}) => {
           this.article = data;
+          if (data.writerId == this.memberId) {
+            this.isMyPost=true
+          }
         },
         (error) => {
           console.log(error);
@@ -111,12 +114,12 @@ export default {
       boardId: 0,
       article: {},
       comment: "",
+      isMyPost: false,
     };
   },
   methods: {
     async deleteArt() {
-      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
-      deleteArticle(this.boardId,
+      await deleteArticle(this.boardId,
           () => {
             this.$router.push(this.linkList)
           }
@@ -139,14 +142,13 @@ export default {
       console.log(item)
     },
     async commentSubmit() {
-      await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       let param = {
         content: this.comment,
         memberId: this.memberId,
         boardId: this.boardId
 
       }
-      postComment(param, ({data}) => {
+      await postComment(param, ({data}) => {
         this.$router.go(0);
         console.log(data)
 
@@ -162,6 +164,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style >
+.quillEditor img{
+  width: 600px !important;
+}
 </style>

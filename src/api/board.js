@@ -2,23 +2,22 @@ import { apiInstance, checkToken } from "@/api/http";
 const api = apiInstance();
 
 async function getBoardList(param, success, fail) {
-  checkToken();
+  await checkToken();
   api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   api.get(`/board/list`, { params: param }).then(success).catch(fail);
 }
 
 async function getBoard(boardId, success, fail) {
-  checkToken();
   api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   api.get(`/board/${boardId}`).then(success).catch(fail);
 }
 async function postComment(param, success, fail) {
-  checkToken();
+  await checkToken();
   api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   api.post(`/board/comment`, JSON.stringify(param)).then(success).catch(fail);
 }
 async function postImage(image, success, fail) {
-  checkToken();
+  await checkToken();
   api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   api
     .post(
@@ -36,18 +35,18 @@ async function postImage(image, success, fail) {
     .catch(fail);
 }
 async function postArticle(param, success, fail) {
-  checkToken();
+  await checkToken();
   api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   api.post(`/board`, JSON.stringify(param)).then(success).catch(fail);
 }
 
 async function deleteArticle(boardId, success, fail) {
-  checkToken();
+  await checkToken();
   api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   api.delete(`/board/${boardId}`).then(success).catch(fail);
 }
 async function putArticle(param, success, fail) {
-  checkToken();
+  await checkToken();
   api.defaults.headers["auth-token"] = sessionStorage.getItem("auth-token");
   api.put(`/board`, JSON.stringify(param)).then(success).catch(fail);
 }

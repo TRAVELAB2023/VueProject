@@ -3,13 +3,13 @@
     <div class="main">
       <h2>공지사항</h2>
       <board-search-menu
-          v-bind:link="linkWrite"
+          v-bind:link="linkWrite" v-bind:flaglink="flaglink"
+
           @search="search"
       ></board-search-menu>
       <BoardList
           v-bind:fields="fields" v-bind:board-list="BoardList"
         v-bind:link="linkItem"
-
       ></BoardList>
       <b-pagination-nav
 
@@ -42,9 +42,11 @@ export default {
     },
 
   },
+  destroyed() {
+    store.commit("changeNoticeWrite", false);
+  },
   components: {BoardSearchMenu, BoardList},
   created() {
-
     let param = {
       searchString: this.searchString,
       searchType: this.searchType,
@@ -66,6 +68,8 @@ export default {
       currentPage: 1,
       pageSize: 1,
       linkWrite: "/notice/write",
+
+      flaglink: 'getNoticeWrite',
 
       fields: [
         {

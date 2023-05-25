@@ -4,7 +4,7 @@
       <div style="height: 10px;"></div>
       <h2>여행 후기</h2>
       <board-search-menu
-          v-bind:link="linkWrite"
+          v-bind:link="linkWrite" v-bind:flaglink="flaglink"
           @search="search"
       ></board-search-menu>
       <BoardList
@@ -71,6 +71,7 @@ export default {
       currentPage: 1,
       pageSize: 1,
       linkWrite: "/board/write",
+      flaglink:'getBoardWrite',
 
       fields: [
         {
