@@ -37,14 +37,18 @@
           </b-form-checkbox>
         </div>
 
-        <KakaoMap></KakaoMap>
+        <KakaoMap :isCalculate="isCalculate" @endCalculate="endCalculate"></KakaoMap>
         <b-overlay :show="show" rounded="sm">
           <b-card title="AI 추천 관광지" :aria-hidden="show ? 'true' : null">
             <b-card-text>{{ AItext }}</b-card-text>
           </b-card>
         </b-overlay>
       </div>
-      <plan-list-side-bar @hidden="rollback" @shown="pushContent"></plan-list-side-bar>
+      <plan-list-side-bar
+        @hidden="rollback"
+        @shown="pushContent"
+        @calculate="tryCalculate"
+      ></plan-list-side-bar>
     </div>
   </div>
 </template>
@@ -78,6 +82,7 @@ export default {
       ],
       isPush: false, // sidebar 열릴 시 이벤트 처리
       show: false, // gpt 응답 overlay 여부
+      isCalculate: false, // 카카오맵 계산 시도 여부
       AItext: "", // gpt 응답값
     };
   },
@@ -90,6 +95,12 @@ export default {
     },
     pushContent() {
       this.isPush = true;
+    },
+    tryCalculate() {
+      this.isCalculate = true;
+    },
+    endCalculate() {
+      this.isCalculate = false;
     },
     initMap() {
       if (!confirm("지도를 초기화하겠습니까?")) {

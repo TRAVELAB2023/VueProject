@@ -21,8 +21,9 @@
         </div>
 
         <div class="p-2 d-flex justify-content-end" style="background-color: white; height: 10%">
-          <button id="createPlan" class="btn btn-success m-2" @click="submitPlan">등록</button>
-          <button id="resetPlan" class="btn btn-danger m-2" @click="resetPlan">초기화</button>
+          <b-button class="m-2" variant="primary" @click="calculateDistance">거리 계산</b-button>
+          <b-button class="m-2" variant="success" @click="submitPlan">등록</b-button>
+          <b-button class="m-2" variant="danger" @click="resetPlan">초기화</b-button>
         </div>
       </div>
     </b-sidebar>
@@ -56,6 +57,12 @@ export default {
       } else {
         this.$emit("hidden");
       }
+    },
+    calculateDistance() {
+      if (!confirm("거리를 계산하겠습니까?")) {
+        return;
+      }
+      this.$emit("calculate");
     },
     resetPlan() {
       if (!confirm("초기화하시겠습니까?")) {
