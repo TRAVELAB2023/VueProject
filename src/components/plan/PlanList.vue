@@ -16,6 +16,7 @@
       <b-pagination-nav
           align="center"
           v-model="currentPage"
+          base-url="#"
           :number-of-pages="pageSize"
           @input="pageMove"
       ></b-pagination-nav>
@@ -34,7 +35,7 @@ export default {
       size: 10,
       start: 0,
       currentPage: 0,
-      pageSize: 5,
+      pageSize: 1,
       sort: "planId,desc",
       fields: [
         {
@@ -71,6 +72,9 @@ export default {
         ({ data }) => {
           this.pageSize = data.totalPage;
           this.planList = data.resultList;
+          if (this.pageSize == 0) {
+            this.pageSize = 1;
+          }
         },
         (error) => {
           alert(error.response.data);

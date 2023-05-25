@@ -39,7 +39,6 @@ const memberStore = {
                     if (data.message === "success") {
                         let accessToken = data["auth-token"];
                         let refreshToken = data["refresh-token"];
-                        // console.log("login success token created!!!! >> ", accessToken, refreshToken);
                         commit("SET_IS_LOGIN", true);
                         commit("SET_IS_LOGIN_ERROR", false);
                         commit("SET_IS_VALID_TOKEN", true);
@@ -58,14 +57,11 @@ const memberStore = {
         },
         async getUserInfo({commit, dispatch}, token) {
             let decodeToken = jwtDecode(token);
-            // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
             await findById(
                 decodeToken.userid,
                 ({data}) => {
-                    console.log(data);
                     if (data.message === "success") {
                         commit("SET_USER_INFO", data.userInfo);
-                        console.log("3. getUserInfo data >> ", data);
                     } else {
                         console.log("유저 정보 없음!!!!");
                     }
@@ -82,21 +78,15 @@ const memberStore = {
             );
         },
         async tokenRegeneration({commit, state}) {
-            console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("auth-token"));
-            console.log(state.userInfo);
             await tokenRegeneration(
                 JSON.stringify(state.userInfo),
                 ({data}) => {
-                    console.log("data!!!!!");
-                    console.log(data);
                     if (data.message === "success") {
                         let accessToken = data["auth-token"];
-                        console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
                         sessionStorage.setItem("auth-token", accessToken);
                         commit("SET_IS_VALID_TOKEN", true);
                     }
                 }, async (error) => {
-                    console.log("error!!!!!!!!!!");
                     console.log(error);
                     // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
                     if (error.response.status == 401) {

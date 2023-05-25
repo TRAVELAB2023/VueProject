@@ -1,8 +1,8 @@
 <template>
-  <div class="container align-items-start">
+  <div data-sal="slide-up" data-sal-delay="500" data-sal-easing="ease-out-back" class="container align-items-start">
     <div class="main ">
       <div>
-
+        <div style="height: 10px;"></div>
         <div style="width: 800px;">
           <h1>{{ article.title }}</h1>
           <div class="border">
@@ -22,14 +22,14 @@
             <b-col></b-col>
             <b-row>
               <b-col>
-                <b-button @click="moveList">목록</b-button>
+                <b-button variant="primary" @click="moveList">목록</b-button>
               </b-col>
 
               <b-col v-if="isMyPost">
-                <b-button @click="modify">수정</b-button>
+                <b-button variant="warning" @click="modify">수정</b-button>
               </b-col>
               <b-col v-if="isMyPost">
-                <b-button @click="deleteArt">삭제</b-button>
+                <b-button variant="danger" @click="deleteArt">삭제</b-button>
               </b-col>
             </b-row>
           </b-row>
@@ -43,7 +43,7 @@
               <b-col></b-col>
               <b-col><input style="width: 550px;" v-model="comment"></b-col>
               <b-col>
-                <b-button @click="commentSubmit" style="width: 70px;">작성</b-button>
+                <b-button variant="success" @click="commentSubmit" style="width: 70px;">작성</b-button>
               </b-col>
             </b-row>
           </div>
@@ -85,27 +85,15 @@
 
 <script>
 import {deleteArticle, getBoard, postComment} from "@/api/board";
+import sal from "sal.js";
 
 
 export default {
   name: "AppBoardDetail",
 
   created() {
+    this.init();
 
-    if (this.$route.params.boardId) {
-      this.$store.commit('changeBoardId', this.$route.params.boardId)
-    }
-    this.boardId = this.$store.getters.getBoardId
-
-    getBoard(this.boardId, ({data}) => {
-          this.article = data;
-          if (data.writerId == this.memberId) {
-            this.isMyPost=true
-          }
-        },
-        (error) => {
-          console.log(error);
-        });
   },
   data() {
     return {
@@ -118,6 +106,23 @@ export default {
     };
   },
   methods: {
+    async init() {
+      if (this.$route.params.boardId) {
+        this.$store.commit('changeBoardId', this.$route.params.boardId)
+      }
+      this.boardId = this.$store.getters.getBoardId
+
+      await getBoard(this.boardId, ({data}) => {
+            this.article = data;
+            if (data.writerId == this.memberId) {
+              this.isMyPost=true
+            }
+          },
+          (error) => {
+            console.log(error);
+          });
+      sal();
+    },
     async deleteArt() {
       await deleteArticle(this.boardId,
           () => {

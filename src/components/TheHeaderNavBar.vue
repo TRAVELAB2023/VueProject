@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="warning">
-    <b-navbar-brand href="#"><img style="width: 100px" src="@/assets/logo.png"></b-navbar-brand>
+    <b-navbar-brand @click="moveMain"><img style="width: 100px" src="@/assets/logo.png"></b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="nav-list">
@@ -15,7 +15,7 @@
         <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
-            <em>계정</em>
+            <em v-if="user">{{ userInfo.nickname }}</em>
           </template>
           <template v-if="user">
             <b-dropdown-item @click="info">내 정보</b-dropdown-item>
@@ -47,10 +47,13 @@ export default {
     ...mapState("memberStore", ["userInfo"]),
   },
   methods: {
+    moveMain() {
+      this.$router.push("/main")
+    },
     async logout() {
       await store.dispatch("memberStore/userLogout", this.user.email);
       this.$router.push("/user/login");
-
+      this.user=null
     },
     info() {
       this.$router.push("/user/info")
