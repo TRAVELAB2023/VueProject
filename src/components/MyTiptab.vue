@@ -15,10 +15,10 @@
       <!--      </div>-->
       <b-row style="float: right;">
         <b-col>
-          <b-button @click="moveList">목록</b-button>
+          <b-button variant="primary" @click="moveList">목록</b-button>
         </b-col>
         <b-col>
-          <b-button @click="submitPost">작성</b-button>
+          <b-button variant="success" @click="submitPost">작성</b-button>
         </b-col>
       </b-row>
     </div>

@@ -33,8 +33,6 @@ export default {
     }
   },
   created() {
-
-    console.log(this.$store.getters[this.flaglink])
     this.flag= this.$store.getters[this.flaglink];
   },
   methods:{

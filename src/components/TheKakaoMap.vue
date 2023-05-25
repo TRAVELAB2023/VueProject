@@ -43,7 +43,7 @@ export default {
     }
   },
   methods: {
-    initMap() {
+    async initMap() {
       let container = document.getElementById("map");
       let options = {
         //지도를 생성할 때 필요한 기본 옵션
@@ -51,7 +51,7 @@ export default {
         level: 10, //지도의 레벨(확대, 축소 정도)
       };
 
-      this.map = new kakao.maps.Map(container, options);
+     this.map = await new kakao.maps.Map(container, options);
 
       this.clusterer = new kakao.maps.MarkerClusterer({
         map: this.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체

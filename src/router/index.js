@@ -104,6 +104,7 @@ const routes = [
             {
                 path: "detail",
                 name: "AppNoticeDetail",
+                beforeEnter: noticeAuth,
                 component: () =>
                     import(/* webpackChunkName: "AppBoard" */ "@/views/notice/AppNoticeDetail.vue"),
             },

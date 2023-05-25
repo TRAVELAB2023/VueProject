@@ -1,5 +1,5 @@
 <template>
-  <div class="container align-items-start">
+  <div data-sal="zoom-in" data-sal-delay="500" data-sal-easing="ease-out-back" class="container align-items-start">
     <div class="main">
       <div style="height: 10px;"></div>
       <h2>여행 후기</h2>
@@ -17,10 +17,7 @@
           align="center"
           v-model="currentPage"
           :number-of-pages="pageSize"
-
           base-url="#"
-          first-number
-          last-number
           @input="pageMove"
           class="customPagination"
       ></b-pagination-nav>
@@ -35,7 +32,7 @@ import AppBoardWrite from "@/views/board/AppBoardWrite.vue";
 import {getBoardList} from "@/api/board";
 import store from "@/store";
 import AppBoardDetail from "@/views/board/AppBoardDetail.vue";
-
+import sal from 'sal.js';
 export default {
   name: "AppBoardList.vue",
   computed: {
@@ -49,16 +46,7 @@ export default {
   },
   components: {BoardSearchMenu, BoardList},
   created() {
-
-    let param = {
-      searchString: this.searchString,
-      searchType: this.searchType,
-      size: this.size,
-      start: this.start
-    }
-
-    this.search(param);
-
+    this.init();
   },
 
   data() {
@@ -102,13 +90,27 @@ export default {
   },
 
   methods: {
+    async init(){
+      let param = {
+        searchString: this.searchString,
+        searchType: this.searchType,
+        size: this.size,
+        start: this.start
+      }
+
+      await this.search(param);
+      sal()
+    },
     async search(param) {
       await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
-      getBoardList(
+      await getBoardList(
           param,
           ({data}) => {
             this.BoardList = data.boardListDtoList;
             this.pageSize = data.page;
+            if (this.pageSize == 0) {
+              this.pageSize = 1;
+            }
           },
           async (error) => {
             console.log(error.response.status)

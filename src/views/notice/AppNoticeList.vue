@@ -13,14 +13,10 @@
         v-bind:link="linkItem"
       ></BoardList>
       <b-pagination-nav
-
+          base-url="#"
           align="center"
           v-model="currentPage"
           :number-of-pages="pageSize"
-
-          base-url="#"
-          first-number
-          last-number
           @input="pageMove"
 
       ></b-pagination-nav>
@@ -48,15 +44,8 @@ export default {
   },
   components: {BoardSearchMenu, BoardList},
   created() {
-    let param = {
-      searchString: this.searchString,
-      searchType: this.searchType,
-      size: this.size,
-      start: this.start
-    }
+    this.init();
 
-    this.search(param);
-    sal();
   },
 
   data() {
@@ -94,6 +83,16 @@ export default {
   },
 
   methods: {
+    async init() {
+      let param = {
+        searchString: this.searchString,
+        searchType: this.searchType,
+        size: this.size,
+        start: this.start
+      }
+      await this.search(param);
+      sal();
+    },
     async search(param) {
       await store.dispatch("memberStore/getUserInfo", sessionStorage.getItem("auth-token"));
       await getNoticeList(
@@ -101,10 +100,11 @@ export default {
           ({data}) => {
             console.log(data)
             this.BoardList = data.list;
-            if(data.page!=0)
-            {
               this.pageSize = data.page;
+            if (this.pageSize == 0) {
+              this.pageSize = 1;
             }
+
           },
           (error) => {
             console.log(error)
