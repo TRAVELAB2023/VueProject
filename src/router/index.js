@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import UserLogin from "@/components/user/UserLogin";
 import UserJoin from "@/components/user/UserJoin";
+import UserCheckAuth from "@/components/user/UserCheckAuth";
 import UserFindPassword from "@/components/user/UserFindPassword";
 import AppBoard from "@/views/board/AppBoard.vue";
 import store from "@/store";
@@ -129,7 +130,8 @@ const routes = [
       {
         path: "share/:key",
         name: "PlanShareDetail",
-        component: () => import(/* webpackChunkName: "Plan" */ "@/components/plan/PlanShareDetail.vue"),
+        component: () =>
+          import(/* webpackChunkName: "Plan" */ "@/components/plan/PlanShareDetail.vue"),
       },
     ],
   },
@@ -159,6 +161,11 @@ const routes = [
         path: "findpw",
         name: "UserFindPassword",
         component: UserFindPassword,
+      },
+      {
+        path: "check/:key",
+        name: "UserCheckAuth",
+        component: UserCheckAuth,
       },
     ],
   },
