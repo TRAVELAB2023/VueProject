@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="warning">
-    <b-navbar-brand href="#"><img style="width: 100px" src="@/assets/logo.png"></b-navbar-brand>
+    <b-navbar-brand href="#"><img style="width: 100px" src="@/assets/logo.png" /></b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="nav-list">
@@ -17,9 +17,13 @@
           <template #button-content>
             <em>계정</em>
           </template>
-          <b-dropdown-item :to="{ name: 'UserLogin' }">로그인</b-dropdown-item>
-          <b-dropdown-item @click="info">내 정보</b-dropdown-item>
-          <b-dropdown-item @click="logout" href="#">로그아웃</b-dropdown-item>
+          <template v-if="user">
+            <b-dropdown-item @click="info">내 정보</b-dropdown-item>
+            <b-dropdown-item @click="logout" href="#">로그아웃</b-dropdown-item>
+          </template>
+          <template v-else>
+            <b-dropdown-item :to="{ name: 'UserLogin' }">로그인</b-dropdown-item>
+          </template>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -27,25 +31,33 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import store from "@/store";
 export default {
-  data(){
-    return{
-      email: this.$store.getters["memberStore/checkUserInfo"].email,
-    }
+  data() {
+    return {
+      user: {},
+    };
   },
 
   name: "HeaderNavBar",
-  methods:{
-   async logout() {
-     await store.dispatch("memberStore/userLogout",this.email);
-     this.$router.push("/user/login")
+  computed: {
+    ...mapState("memberStore", ["userInfo"]),
+  },
+  methods: {
+    async logout() {
+      await store.dispatch("memberStore/userLogout", this.user.email);
+      this.$router.push("/user/login");
     },
-     info(){
-     this.$router.push("/user/info")
-
-    }
-  }
+    info() {
+      this.$router.push("/user/info");
+    },
+  },
+  watch: {
+    userInfo(newVal) {
+      this.user = newVal;
+    },
+  },
 };
 </script>
 

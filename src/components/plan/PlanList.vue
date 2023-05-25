@@ -1,5 +1,5 @@
 <template>
-  <div data-sal="zoom-out" data-sal-delay="1000" data-sal-easing="ease-out-back">
+  <div data-sal="zoom-in" data-sal-delay="500" data-sal-easing="ease-out-back">
     <h2>여행 계획 리스트</h2>
     <b-table
       selectable
