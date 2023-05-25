@@ -6,6 +6,7 @@ import UserCheckAuth from "@/components/user/UserCheckAuth";
 import UserFindPassword from "@/components/user/UserFindPassword";
 import AppBoard from "@/views/board/AppBoard.vue";
 import store from "@/store";
+import UserInfo from "@/components/user/UserInfo.vue";
 
 Vue.use(VueRouter);
 
@@ -141,6 +142,7 @@ const routes = [
     beforeEnter: onlyAuthUser,
     component: () => import(/* webpackChunkName: "createPlan" */ "@/views/AppCreatePlan.vue"),
   },
+
   {
     path: "/user",
     name: "AppUser",
@@ -166,6 +168,11 @@ const routes = [
         path: "check/:key",
         name: "UserCheckAuth",
         component: UserCheckAuth,
+      },
+      {
+        path: "info",
+        name: "UserInfo",
+        component: UserInfo,
       },
     ],
   },
